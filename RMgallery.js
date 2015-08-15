@@ -1,4 +1,4 @@
-var inputparsing=JSON.parse($('script[src="RMgallery.js"]').html())
+var inputparsing=JSON.parse($('script[src="http://houyhnhnm.github.io/RMgallery.js"]').html())
 var RMHLbase=inputparsing.RMHL;
 var RMHWbase=inputparsing.RMHW;
 var RMHQbase=inputparsing.RMHQ;
