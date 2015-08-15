@@ -1,7 +1,7 @@
 EXAMPLE SCRIPT USING Hgallery.js
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://houyhnhnm.github.io/js/Hgallery.js">{"HQ": 3,"HW": 70 ,"HL": 3, "HT": "RICHARD MURRAY HUMBLR GALLERY", "Hrss" : "http://richardmurrayhumblr.tumblr.com/rss" }</script>
+<script src="http://houyhnhnm.github.io/js/Hgallery.js">{"HQ": 3,"HW": 70 ,"HL": 3, "HT": "YOUR TITLE ABOVE THE SCROLLING IMAGE GALLERY", "Hrss" : "RSS FEED TO YOUR TUMBLR" }</script>
 <div id="Hdivspace"></div>
 <!-- HQ - quantity displayed  HW width to image HL seconds between activities HT title to display Hrss Your tumblr rss feed-->
 use mystuffcloud to see where old content is
