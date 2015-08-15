@@ -1,0 +1,6 @@
+EXAMPLE SCRIPT USING RMgallery.js
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://houyhnhnm.github.io/js/RMgallery.js">{"RMHQ": 5,"RMHW": 50 ,"RMHL": 3 }</script>
+<div id="RMHdivspace"></div>
+<!-- RMHQ - quantity displayed  RMHW width to image RMHL seconds between activities-->
