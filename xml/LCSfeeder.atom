@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xml" href="LCSatom.xsl"?>
+<?xml-stylesheet type="text/xml" href="LCSatom.xslt.xml"?>
 	<feed xmlns="http://www.w3.org/2005/Atom">
 		<title>Lets Chat Soccer ATOM Feed</title>
 		<link rel="alternate" href="https://plus.google.com/b/113017478177192749610/collection/kuZ7a"></link>
