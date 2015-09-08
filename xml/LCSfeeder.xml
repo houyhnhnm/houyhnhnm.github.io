@@ -1,3 +1,13 @@
+<?xml-stylesheet href="LCSfeeder.xsl" type="text/xsl"?>
+<rss version="2.0">
+<channel>
+  <title>Lets Chat Soccer RSS Feed</title>
+  <link>https://plus.google.com/b/113017478177192749610/collection/kuZ7a</link>
+  <description>Lets Chat Soccer RSS Feed, use in aggregators</description>
+</channel>
+</rss>
+
+<!--
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
@@ -18,15 +28,4 @@
 </xsl:stylesheet>
 </channel>
 </rss>
-
-
-<!--<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-<channel>
-  <title>Lets Chat Soccer RSS Feed</title>
-  <link>https://plus.google.com/b/113017478177192749610/collection/kuZ7a</link>
-  <description>Lets Chat Soccer RSS Feed, use in aggregators</description>
-</channel>
-</rss>
-<?xml-stylesheet href="LCSfeeder.xsl" type="text/xsl"?>
 -->
