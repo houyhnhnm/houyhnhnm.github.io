@@ -18,7 +18,6 @@
 </xsl:stylesheet>
 </channel>
 </rss>
-<?xml-stylesheet href="LCSfeeder.xsl" type="text/xsl"?>
 
 
 <!--<?xml version="1.0" encoding="UTF-8"?>
