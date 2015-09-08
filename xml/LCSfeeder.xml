@@ -1,4 +1,6 @@
 <?xml-stylesheet href="LCSfeeder.xsl" type="text/xsl"?>
+<!--
+<?xml-stylesheet href="LCSfeeder.xsl" type="text/xsl"?>
 <rss version="2.0">
 <channel>
   <title>Lets Chat Soccer RSS Feed</title>
@@ -6,3 +8,4 @@
   <description>Lets Chat Soccer RSS Feed, use in aggregators</description>
 </channel>
 </rss>
+-->
