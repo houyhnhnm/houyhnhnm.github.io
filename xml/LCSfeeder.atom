@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xml" href="LCSatom.xsl"?>
+	<feed xmlns="http://www.w3.org/2005/Atom">
+		<title>Lets Chat Soccer ATOM Feed</title>
+		<link rel="self" href="https://plus.google.com/b/113017478177192749610/collection/kuZ7a"></link>
+		<updated></updated>
+		<id>http://houyhnhnm.github.io/xml/LCSfeeder.atom</id>
+		<subtitle>Lets Chat Soccer ATOM Feed, use in aggregators</subtitle>
+		<author>
+			<name>Houyhnhnm</name>
+			<uri>https://github.com/houyhnhnm</uri>
+		</author>
+		<rights>Copyright (c) 2015, Houyhnhnm</rights>
+	</feed>
