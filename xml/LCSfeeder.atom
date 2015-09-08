@@ -2,8 +2,9 @@
 <?xml-stylesheet type="text/xml" href="LCSatom.xsl"?>
 	<feed xmlns="http://www.w3.org/2005/Atom">
 		<title>Lets Chat Soccer ATOM Feed</title>
-		<link rel="self" href="https://plus.google.com/b/113017478177192749610/collection/kuZ7a"></link>
-		<updated></updated>
+		<link rel="alt" href="https://plus.google.com/b/113017478177192749610/collection/kuZ7a"></link>
+		<link rel="self" href="http://houyhnhnm.github.io/xml/LCSfeeder.atom"></link>
+		<updated>2002-10-02T10:00:00-05:00</updated>
 		<id>http://houyhnhnm.github.io/xml/LCSfeeder.atom</id>
 		<subtitle>Lets Chat Soccer ATOM Feed, use in aggregators</subtitle>
 		<author>
