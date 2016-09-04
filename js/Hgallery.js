@@ -102,15 +102,13 @@ function myFunction(arr) {
 		out +="\" target=\"_blank\"><img src=\"";
 		var subs=arr.query.results.item[i].description;
 		var subs2="http://houyhnhnm.github.io/js/no%20image%20text%20only.png";
-		//out += subs.match(/http[^"]+/)[0];
-		if(subs.match(/src=http[^"]+/)==null){
+		if(subs.match(/<img[^>]+>/)==null){
 			out+=subs2
 		}
 		else{
-			subs=subs.replace("src=","");
+			subs=subs.match(/<img[^>]+>/);
 			out+=subs.match(/http[^"]+/);
 		}
-		//out += subs.match(/http[^"]+/)[0];
 		out += "\" width=\"";
 		out += HWbase;
 		out +="px\"></img></a></td>";
