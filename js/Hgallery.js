@@ -106,7 +106,7 @@ function myFunction(arr) {
 			out+=subs2
 		}
 		else{
-			var subs3=subs.match(/<img[^>]+>/);
+			var subs3=new String(subs.match(/<img[^>]+>/));
 			out+=subs3.match(/http[^"]+/);
 		}
 		out += "\" width=\"";
