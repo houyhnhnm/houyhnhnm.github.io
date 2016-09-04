@@ -101,7 +101,12 @@ function myFunction(arr) {
 		out +=arr.query.results.item[i].link;
 		out +="\" target=\"_blank\"><img src=\"";
 		var subs=arr.query.results.item[i].description;
-		out += subs.match(/http[^"]+/)[0];
+		//out += subs.match(/http[^"]+/)[0];
+		if(subs.match(/http[^"]+/)==null){}
+		else{
+			out+=subs.match(/http[^"]+/);
+		}
+		//out += subs.match(/http[^"]+/)[0];
 		out += "\" width=\"";
 		out += HWbase;
 		out +="px\"></img></a></td>";
