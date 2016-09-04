@@ -106,8 +106,8 @@ function myFunction(arr) {
 			out+=subs2
 		}
 		else{
-			subs=subs.match(/<img[^>]+>/);
-			out+=subs.match(/http[^"]+/);
+			var subs3=subs.match(/<img[^>]+>/);
+			out+=subs3.match(/http[^"]+/);
 		}
 		out += "\" width=\"";
 		out += HWbase;
