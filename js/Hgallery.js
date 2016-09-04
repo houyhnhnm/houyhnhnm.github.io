@@ -103,10 +103,11 @@ function myFunction(arr) {
 		var subs=arr.query.results.item[i].description;
 		var subs2="http://houyhnhnm.github.io/js/no%20image%20text%20only.png";
 		//out += subs.match(/http[^"]+/)[0];
-		if(subs.match(/http[^"]+/)==null){
+		if(subs.match(/src=http[^"]+/)==null){
 			out+=subs2
 		}
 		else{
+			subs=subs.replace("src=","");
 			out+=subs.match(/http[^"]+/);
 		}
 		//out += subs.match(/http[^"]+/)[0];
