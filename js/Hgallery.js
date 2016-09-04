@@ -101,8 +101,11 @@ function myFunction(arr) {
 		out +=arr.query.results.item[i].link;
 		out +="\" target=\"_blank\"><img src=\"";
 		var subs=arr.query.results.item[i].description;
+		var subs2="http://houyhnhnm.github.io/js/no%20image%20text%20only.png";
 		//out += subs.match(/http[^"]+/)[0];
-		if(subs.match(/http[^"]+/)==null){}
+		if(subs.match(/http[^"]+/)==null){
+			out+=subs2
+		}
 		else{
 			out+=subs.match(/http[^"]+/);
 		}
