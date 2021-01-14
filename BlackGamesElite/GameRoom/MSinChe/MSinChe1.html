@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSinChe 1 - KumRan</title>
+<script>
+//Javascript-functions + variables
+var totalseconds=0;
+var seconds=0;
+var level=1;
+var colorsequence=[];
+var gamestart=0;
+var secondclock; 
+var usercolors=[];
+var pre=0;
+var current=0;
+var remembercolor=1;
+var userlevel=1;
+var submitcon=0;
+
+function addcolors(level){
+	colorsequence=[];
+	var index=0;
+	while(index<level+1){
+		if(index==0){
+			pre=Math.floor((Math.random() * 6) + 0);
+			colorsequence.push(pre);
+		}
+		else{
+			current=Math.floor((Math.random() * 6) + 0);
+			while(current==pre){
+				current=Math.floor((Math.random() * 6) + 0);
+			}
+			colorsequence.push(current);
+			pre=current;
+		}
+		index++;
+	}
+	
+}
+
+function returncolor(value){
+	var retvalue="";
+	if(value==0){
+		retvalue="#000000"
+	}
+	else if(value==1){
+		retvalue="#FF0000"
+	}
+	else if(value==2){
+		retvalue="#00FF00"
+	}
+	else if(value==3){
+		retvalue="#964B00"
+	}
+	else if(value==4){
+		retvalue="#0000FF"
+	}
+	else if(value==5){
+		retvalue="#FFFF00"
+	}
+	else{
+		//do nothing
+	}
+	return retvalue;
+}
+
+function coloroutput(){
+	var painter= document.getElementById("colorview");
+	var ctx = painter.getContext("2d");
+	ctx.fillStyle = returncolor(colorsequence[remembercolor-1]);
+	ctx.fillRect(0, 0, 100, 100);
+}
+
+function inputoutput(){
+	document.getElementById("actiontext2").innerHTML="Do you Remember Color Number "+userlevel;
+}
+
+function inputoutput2(){
+	document.getElementById("actiontext2").innerHTML="Nothing left to do but check";
+}
+
+function submitquery(){
+	document.getElementById("actiontext").innerHTML="Click If You Want To Test Your Memory!?";
+}
+
+function $1click(){ 
+	//inputoutput();
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(0);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(0);
+		ctx.fillRect(0, 0, 100, 100); 
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function $2click(){ 
+	//inputoutput();
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(1);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(1);
+		ctx.fillRect(0, 0, 100, 100);  
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function $3click(){ 
+	//inputoutput();
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(2);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(2);
+		ctx.fillRect(0, 0, 100, 100);  
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function $4click(){ 
+	//inputoutput();
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(3);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(3);
+		ctx.fillRect(0, 0, 100, 100);  
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function $5click(){
+	//inputoutput();
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(4);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(4);
+		ctx.fillRect(0, 0, 100, 100);  
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function $6click(){ 
+	if((userlevel<=level+1)&&(submitcon==0)){
+		usercolors.push(5);
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = returncolor(5);
+		ctx.fillRect(0, 0, 100, 100);
+		userlevel++;
+		if(userlevel>level+1){
+			submitcon=1;
+			inputoutput2();
+			submitquery(); 
+		}
+		else{
+			inputoutput();
+		}
+	}
+	else{
+		submitcon=1;
+		submitquery(); 
+	}
+}
+
+function leveloutput(){
+	document.getElementById("MessageUser").innerHTML="Please Remember "+(level+1)+" colors, this is number "+remembercolor;
+}
+
+function Checkoutput(){
+	document.getElementById("actionbutton").innerHTML="Click if your ready to REMEMBER "+(level+1)+" colors?";
+}
+
+function gamemachine1(){
+	if(gamestart==0){
+		//do nothing
+	}
+	else if(gamestart==1){
+		remembercolor++;
+		if(remembercolor>level+1){
+			document.getElementById("controller1").style.display="none";
+			document.getElementById("controller2").style.display="none";
+			var painter= document.getElementById("colorview");
+			var ctx = painter.getContext("2d");
+			ctx.fillStyle = "#FFFFFF";
+			ctx.fillRect(0, 0, 100, 100);
+			inputoutput();
+			//document.getElementById("actiontext2").innerHTML="Do you Remember The Colors?!";
+			document.getElementById("controller3").style.display="block";
+		}
+		else if(remembercolor==level+1){
+			coloroutput();
+			leveloutput();
+			Checkoutput();
+		}
+		else{
+			leveloutput();
+			coloroutput();
+		}
+		//actions
+	}
+	else{
+		//do nothing
+	}
+}
+
+function KumRanTimer(){
+	seconds++;
+	document.getElementById("TimerOutput").innerHTML=seconds;
+}
+
+function initial(){
+	if(gamestart==0){
+		document.getElementById("controller1").style.display="block";
+		document.getElementById("controller2").style.display="block";
+		document.getElementById("controller3").style.display="none";
+		totalseconds=0;
+		seconds=0;
+		level=1;
+		remembercolor=1;
+		userlevel=1;
+		submitcon=0;
+		colorsequence=[];
+		usercolors=[];
+		document.getElementById("TimerOutput").innerHTML=seconds;
+		document.getElementById("LevelOutput").innerHTML=level;
+		secondclock= setInterval(KumRanTimer, 1000);
+		leveloutput();
+		addcolors(level);
+		coloroutput();
+		gamestart=1;
+		document.getElementById("actionbutton").innerHTML="Onto The Next Color";
+		document.getElementById("actiontext").innerHTML="Please choose your color below";
+		document.getElementById("resultarea").innerHTML="";
+	}
+	else{
+		//do nothing
+	}
+}
+
+function running(){
+		document.getElementById("controller1").style.display="block";
+		document.getElementById("controller2").style.display="block";
+		document.getElementById("controller3").style.display="none";
+		seconds=0;
+		level++;
+		remembercolor=1;
+		userlevel=1;
+		submitcon=0;
+		colorsequence=[];
+		usercolors=[];
+		document.getElementById("TimerOutput").innerHTML=seconds;
+		document.getElementById("LevelOutput").innerHTML=level; 
+		leveloutput();
+		addcolors(level);
+		coloroutput(); 
+		document.getElementById("actionbutton").innerHTML="Onto The Next Color";
+		document.getElementById("actiontext").innerHTML="Please choose your color below";
+}
+
+function submitter(){
+	var gambler=0;
+	var index=0;
+	if(submitcon==0){
+		//do nothing
+	}
+	else if(submitcon==1){
+		//colorsequence compare to usercolors
+		while((index<level)&&(gambler==0)){
+			if(colorsequence[index]!=usercolors[index]){
+				gambler=1;
+			}
+			index++;
+		}
+		totalseconds=totalseconds+seconds;
+		if(gambler==0){			
+			document.getElementById("resultarea").innerHTML="You Reached Level: "+level2+" , You used "+totalseconds+" Seconds";
+			running();
+		}
+		else if(gambler==1){
+			document.getElementById("resultarea").innerHTML="You Reached Level: "+level+" , You used "+totalseconds+" Seconds";
+			terminal();
+		}
+	}
+	else{
+		//do nothing
+	}
+}
+
+function terminal(){
+	if(gamestart==1){
+		gamestart=0;
+		clearInterval(secondclock);
+		document.getElementById("TimerOutput").innerHTML=0;
+		document.getElementById("LevelOutput").innerHTML=1;
+		document.getElementById("actionbutton").innerHTML="Game Not Started";
+		document.getElementById("MessageUser").innerHTML="Rectangle above is where colors will be displayed";
+		var painter= document.getElementById("colorview");
+		var ctx = painter.getContext("2d");
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillRect(0, 0, 100, 100);
+		document.getElementById("controller1").style.display="block";
+		document.getElementById("controller2").style.display="block";
+		document.getElementById("controller3").style.display="none";
+	}
+	else{
+		//do nothing
+	}
+}
+</script>
+<style>
+/*CSS*/
+#colorview{
+border:1px solid #000000;
+}
+</style>
+</head>
+<body>
+<h1>MSinChe 1</h1>
+<h2>KumRan</h2>
+<p>Remember the Colors for as long as you can</p>
+<button onclick="initial()">Anza/Start</button><button onclick="terminal()">Maliza/Finish</button>
+<p><span>Seconds: </span><span id="TimerOutput"></span></p>
+<p><span>Level: </span><span id="LevelOutput"></span></p>
+<canvas id="colorview" width="100" height="100"></canvas>
+<p id="controller1" ><span id="MessageUser">Rectangle above is where colors will be displayed</span></p>
+<p id="controller2" ><button id="actionbutton" onclick="gamemachine1()">Game Not Started</button></p>
+<p id="controller3" ><button id="actiontext" onclick="submitter()" >Please choose your color below</button>
+<span id="actiontext2">Game Not Started</span><br></br>
+<button onclick="$1click()">Black</button>
+<button onclick="$2click()">Red</button>
+<button onclick="$3click()">Green</button>
+<button onclick="$4click()">Brown</button>
+<button onclick="$5click()">Blue</button>
+<button onclick="$6click()">Yellow</button>
+</p>
+<span id="resultarea"></span>
+<script>
+	document.getElementById("controller1").style.display="block";
+	document.getElementById("controller2").style.display="block";
+	document.getElementById("controller3").style.display="none";
+</script>
+</body>
+</html> 
