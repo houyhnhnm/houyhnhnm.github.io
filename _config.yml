@@ -1,0 +1,13 @@
+# Site wide configuration
+
+title: Houyhnhnm WebPage
+locale: en_US
+logo: # filename of a logo image that has been placed into your images directory
+
+# Enter the following platform usernames if you would like for them to appear on your site.
+owner:
+  name: Richard Murray
+  avatar: # image - just place the url , for example between brackaters <bio-photo.jpg>
+  bio: "This is my programming webpage, currently on a game a day project for the BlackGamesElite group"
+  email: # I will prefer going to my AALBC group page
+  github: houyhnhnm
