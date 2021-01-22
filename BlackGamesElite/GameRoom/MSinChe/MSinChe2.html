@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSinChe 2 - NyoKuun</title>
+<script>
+//variables and functions
+var chezostate=0; //gamestate
+var chezoclock; //gameclock
+var nyoclock; //NyoKuun clock
+var timevar=0;
+var levelvar=0;
+var ground1=[];
+var ground2=[];
+var groundstate=0;
+var nyox=0;
+var nyoy=0;
+var nyoaction=0; //0 up 1 down 2 right 3 left
+var switchcounter=0;
+
+function inittimevar(){
+	timevar=0;
+}
+
+function inctimevar(){
+	timevar++;
+}
+
+function initswitchcounter(){
+	switchcounter=0;
+}
+
+function incswitchcounter(){
+	switchcounter++;
+}
+
+function checkswitchcounter(){
+	var returnvalue=false;
+	if(switchcounter<((levelvar*2)+2)){
+		returnvalue=true;
+	}
+	return returnvalue;
+}
+
+function displaytimevar(){
+	document.getElementById("timeoutput").innerHTML=timevar;
+}
+
+function displaytimevarnull(){
+	document.getElementById("timeoutput").innerHTML='-';
+}
+
+function timecounter(){
+	inctimevar();
+	displaytimevar();
+}
+
+function initlevelvar(){
+	levelvar=0;
+}
+
+function inclevelvar(){
+	levelvar++;
+}
+
+function displaylevelvar(){
+	document.getElementById("leveloutput").innerHTML=levelvar;
+}
+
+function displaylevelvarnull(){
+	document.getElementById("leveloutput").innerHTML='-';
+}
+
+function initgrounds(){
+	ground1=[];
+	ground2=[];
+	var index=0;
+	var index2=0;
+	var subcontent1=[];
+	var subcontent2=[];
+	while(index2<100){
+		subcontent1=[];
+		subcontent2=[];
+		index=0;
+		while(index<100){
+			subcontent1.push(0);
+			subcontent2.push(0);
+			index++;
+		}
+		ground1.push(subcontent1);
+		ground2.push(subcontent2);
+		index2++;
+	}
+}
+
+function displayground(groundvalue){
+	var groundhold;
+	if(groundvalue==0){
+		groundhold=document.getElementById("level1");
+		var groundvalues = groundhold.getContext("2d");
+		var groundimage = groundvalues.createImageData(100, 100);
+		var index = 0;
+		var index2 = 0;
+		for(index=0; index<100;index++){
+			for(index2=0;index2<100;index2++){
+					if(ground1[index][index2]==0){ 
+						groundimage.data[(index*400)+(index2*4)+0] = 0;
+						groundimage.data[(index*400)+(index2*4)+1] = 0;
+						groundimage.data[(index*400)+(index2*4)+2] = 255;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground1[index][index2]==1){
+						groundimage.data[(index*400)+(index2*4)+0] = 255;
+						groundimage.data[(index*400)+(index2*4)+1] = 0;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground1[index][index2]==2){
+						groundimage.data[(index*400)+(index2*4)+0] = 0;
+						groundimage.data[(index*400)+(index2*4)+1] = 255;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground1[index][index2]==3){
+						groundimage.data[(index*400)+(index2*4)+0] = 255;
+						groundimage.data[(index*400)+(index2*4)+1] = 255;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+			}
+		}
+		groundvalues.putImageData(groundimage, 0, 0);
+	}
+	else if(groundvalue==1){
+		groundhold=document.getElementById("level2");
+		var groundvalues = groundhold.getContext("2d");
+		var groundimage = groundvalues.createImageData(100, 100);
+		var index = 0;
+		var index2 = 0;
+		for(index=0; index<100;index++){
+			for(index2=0;index2<100;index2++){
+					if(ground2[index][index2]==0){ 
+						groundimage.data[(index*400)+(index2*4)+0] = 0;
+						groundimage.data[(index*400)+(index2*4)+1] = 0;
+						groundimage.data[(index*400)+(index2*4)+2] = 255;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground2[index][index2]==1){
+						groundimage.data[(index*400)+(index2*4)+0] = 255;
+						groundimage.data[(index*400)+(index2*4)+1] = 0;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground2[index][index2]==2){
+						groundimage.data[(index*400)+(index2*4)+0] = 0;
+						groundimage.data[(index*400)+(index2*4)+1] = 255;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+					else if(ground2[index][index2]==3){
+						groundimage.data[(index*400)+(index2*4)+0] = 255;
+						groundimage.data[(index*400)+(index2*4)+1] = 255;
+						groundimage.data[(index*400)+(index2*4)+2] = 0;
+						groundimage.data[(index*400)+(index2*4)+3] = 255;
+					}
+			}
+		}
+		groundvalues.putImageData(groundimage, 0, 0);
+	}
+	else{
+		//do nothing
+	}
+}
+
+function setholes(){
+	var index=0;
+	var temp1=0;
+	var temp2=0;
+	while(index<((levelvar*2)+2)){ 
+		temp1=Math.floor((Math.random() * (100-1)) + 1);
+		temp2=Math.floor((Math.random() * (100-1)) + 1);
+		while(ground1[temp1][temp2]|ground2[temp1][temp2]!=0){
+			temp1=Math.floor((Math.random() * (100-1)) + 1);
+			temp2=Math.floor((Math.random() * (100-1)) + 1);
+		}
+		if(index<(((levelvar*2)+2)/2)){
+			ground1[temp1][temp2]=2;
+			ground2[temp1][temp2]=2;
+		}
+		else{
+			ground1[temp1][temp2]=3;
+			ground2[temp1][temp2]=3;
+		}
+		index++;
+	}
+}
+
+function switchgroundstate(){
+	if(groundstate==0){
+		groundstate=1;
+	}
+	else if(groundstate==1){
+		groundstate=0;
+	}
+	else{
+		//
+	}
+}
+
+function initnyos(){
+	var temp1=Math.floor((Math.random() * (100-1)) + 1);
+	var temp2=Math.floor((Math.random() * (100-1)) + 1);
+	if(groundstate==0){
+		if(ground1[temp1][temp2]!=0){
+			temp1=Math.floor((Math.random() * (100-9)) + 9);
+			temp2=Math.floor((Math.random() * (100-9)) + 9);
+		}
+		nyox=temp1;
+		nyoy=temp2;
+	}
+	else if(groundstate==1){
+		if(ground2[temp1][temp2]!=0){
+			temp1=Math.floor((Math.random() * (100-9)) + 9);
+			temp2=Math.floor((Math.random() * (100-9)) + 9);
+		}
+		nyox=temp1;
+		nyoy=temp2;
+	}
+	else{
+		//do nothing
+	}
+}
+
+function upaction(){
+	if(nyoaction=2|3){
+		nyoaction=0;
+	}
+}
+
+function downaction(){
+	if(nyoaction=2|3){
+		nyoaction=1;
+	}
+}
+
+function rightaction(){
+	if(nyoaction=0|1){
+		nyoaction=2;
+	}
+}
+
+function leftaction(){
+	if(nyoaction=0|1){
+		nyoaction=3;
+	}
+}
+
+function messager(value){
+	if(value==0){
+		document.getElementById("outputmessage").innerHTML="";
+	}
+	else if(value==1){
+		document.getElementById("outputmessage").innerHTML="GAME OVER -> hit a wall";
+	}
+	else if(value==2){
+		document.getElementById("outputmessage").innerHTML="GAME OVER -> hit the NyoKuun or a blockade, in the left ground green you can go through, yellow stop game";
+	}
+	else if(value==3){
+		document.getElementById("outputmessage").innerHTML="GAME OVER -> hit the NyoKuun or a blockade, in the right ground yellow you can go through, green stop game";
+	}
+	else if(value==4){
+		document.getElementById("outputmessage").innerHTML="NEXT LEVEL EARED; level is now ->"+(levelvar+1);
+	}
+	else{
+		//do nothing
+	}
+}
+
+function running(){
+	clearInterval(chezoclock);
+	clearInterval(nyoclock);
+	inclevelvar();
+	messager(4); 
+	inittimevar();
+	initgrounds();
+	initswitchcounter();
+	setholes();
+	initnyos();
+	displaytimevar();
+	displaylevelvar();
+	displayground(0);
+	displayground(1);
+	chezoclock= setInterval(timecounter, 1000);
+	nyoclock= setInterval(nyocounter, 1000);
+}
+
+function nyocounter(){
+	if(nyoaction==0){
+		nyox--;
+	}
+	else if(nyoaction==1){
+		nyox++;
+	}
+	else if(nyoaction==2){
+		nyoy++;
+	}
+	else if(nyoaction==3){
+		nyoy--;
+	}
+	else{
+		//do nothing
+	}
+	if(nyox<0|nyoy<0|nyox>99|nyoy>99){
+		messager(1);
+		MalizaChezo();
+	}
+	else{
+		if(groundstate==0){
+			if(ground1[nyox][nyoy]==1){
+				messager(2);
+				MalizaChezo();
+			}
+			else if(ground1[nyox][nyoy]==3){
+				messager(2);
+				MalizaChezo();
+			}
+			else if(ground1[nyox][nyoy]==2){
+				incswitchcounter();
+				if(checkswitchcounter()){
+					ground1[nyox][nyoy]=1;
+					switchgroundstate();
+					ground2[nyox][nyoy]=1;
+				}
+				else{
+					running();
+				}
+			}
+			else if(ground1[nyox][nyoy]==0){
+				ground1[nyox][nyoy]=1;
+			}
+			else{
+				//do nothing
+			}
+			displayground(0);
+			displayground(1);
+		}
+		else if(groundstate==1){
+			if(ground2[nyox][nyoy]==1){
+				messager(3);
+				MalizaChezo();
+			}
+			else if(ground2[nyox][nyoy]==2){
+				messager(3);
+				MalizaChezo();
+			}
+			else if(ground2[nyox][nyoy]==3){
+				incswitchcounter();
+				if(checkswitchcounter()){
+					ground2[nyox][nyoy]=1;
+					switchgroundstate();
+					ground1[nyox][nyoy]=1;
+				}
+				else{
+					running();
+				}
+			}
+			else if(ground2[nyox][nyoy]==0){
+				ground2[nyox][nyoy]=1;
+			}
+			else{
+				//do nothing
+			}
+			displayground(0);
+			displayground(1);
+		}
+		else{
+			//do nothing
+		}
+	}
+}
+
+
+
+function AnzaChezo(){
+	if(chezostate==0){
+		chezostate=2;
+		messager(0); 
+		inittimevar();
+		initlevelvar();
+		initgrounds();
+		initswitchcounter();
+		setholes();
+		initnyos();
+		displaytimevar();
+		displaylevelvar();
+		displayground(0);
+		displayground(1);
+		chezoclock= setInterval(timecounter, 1000);
+		nyoclock= setInterval(nyocounter, 500);
+		chezostate=1;
+	}
+}
+
+function MalizaChezo(){
+	if(chezostate==1){
+		chezostate=2;
+		clearInterval(chezoclock);
+		clearInterval(nyoclock);
+		inittimevar();
+		initlevelvar();
+		displaytimevarnull();
+		displaylevelvarnull();
+		initgrounds();
+		displayground(0);
+		displayground(1);
+		chezostate=0;
+	}
+}
+ 
+</script>
+<style>
+/*CSS*/
+#level1{
+border:1px solid #000000;
+}
+#level2{
+border:1px solid #000000;
+}
+</style>
+</head>
+<body >
+<a href="https://aalbc.com/tc/clubs/5-blackgameselite/" target="_blank"><img src="http://houyhnhnm.github.io/BlackGamesElite/BlackGamesElite%20Banner4.png" width="150"></img></a>
+
+<h1>MSinChe 2</h1>
+<h2>NyoKuun</h2>
+<p>Seconds: <span id="timeoutput"></span></p>
+<p>Level: <span id="leveloutput"></span></p>
+<p><canvas id="level1" width="100" height="100" ></canvas><canvas id="level2" width="100" height="100" ></canvas></p>
+<p><button onclick="upaction()">Kaska/Up</button><button onclick="downaction()">Kusi/Down</button><button onclick="rightaction()">Masha/Right</button><button onclick="leftaction()">Magha/Left</button></p>
+<p><button onclick="AnzaChezo()">Anza/Start</button><button onclick="MalizaChezo()">Maliza/Finish</button></p>
+<p><span id="outputmessage"></span></p>
+</body>
+</html> 
