@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSinChe 5 - HazMin</title>
+<script>
+var chezostate=0;
+var agevalue=0;
+var HazMinlevel=0;
+var HazMintimer=0;
+var HazMinheight=0;
+var chezotimer;
+var HazMincompletetime=0;
+var HazMins= [];
+var HazMinsdira=0;
+var HazMinsstate=0; 
+
+function systemmessage(value){
+	if(value==0){
+		document.getElementById("messagespace1").innerHTML="Have fun playing HazMin the treasure retrieval challenge of the future, press Anza to start the game, press Maliza to end the game, KarneNy decides how many centuries in the future the HazMin are";
+	}
+	else if(value==1){
+		document.getElementById("messagespace1").innerHTML="Ended the game, note your total time after [complete time] below, hope you had fun! PLAY AGAIN!";
+	}
+	else{//do nothing
+	}
+}
+
+function agemessage(value){
+	if(value==0){
+		document.getElementById("agemessage").innerHTML="You may live to see this";
+	}
+	else if(value==1){
+		document.getElementById("agemessage").innerHTML="Is our hero your grandchild";
+	}
+	else if(value==2){
+		document.getElementById("agemessage").innerHTML="You are guaranteed dead, unless you are in cryosleep";
+	}
+	else if(value==3){
+		document.getElementById("agemessage").innerHTML="Will there be colonies on Mars?";
+	}
+	else if(value==4){
+		document.getElementById("agemessage").innerHTML="What will the internet become by then?";
+	}
+	else if(value==5){
+		document.getElementById("agemessage").innerHTML="Will people live under the sea?";
+	}
+	else if(value==6){
+		document.getElementById("agemessage").innerHTML="Will clones plus androids fight for rights?";
+	}
+	else if(value==7){
+		document.getElementById("agemessage").innerHTML="Will the native american populace be fully revitalized somewhere?";
+	}
+	else if(value==8){
+		document.getElementById("agemessage").innerHTML="Will the Cannimits or Klaatu or someone you are familiar with make a visit to earth?";
+	}
+	else if(value==9){
+		document.getElementById("agemessage").innerHTML="The Future is never known, have fun getting there";
+	}
+	else if(value==-1){
+		document.getElementById("agemessage").innerHTML="";
+	}
+	else{//do nothing
+	}
+}
+
+function gamemessage(value){
+	if(value==0){
+		document.getElementById("messagespace2").innerHTML="You have not started the game yet";
+	}
+	else if(value==1){
+		document.getElementById("messagespace2").innerHTML="You are playing the game, note the Situation below";
+	}
+	else if(value==2){
+		document.getElementById("messagespace2").innerHTML="You ended the game, hope you had fun and PLAY AGAIN!";
+	}
+	else{//do nothing
+	}
+}
+
+function situationmessage(value){
+	if(value==0){
+		document.getElementById("positioninfo").innerHTML="You have not started the game yet^2";
+	}
+	else if(value==1){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="This is level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now, progress by clicking the yellow exit to the next level" ;
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="This is level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high less than 100 years from now, progress by clicking the yellow exit to the next level" ;
+		}
+	}
+	else if(value==2){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="You helped steal from "+(HazMinheight-2)+" HazMin at least "+(agevalue*100)+" years from now, congratulations!";
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="You helped steal from "+(HazMinheight-2)+" HazMin less than 100 years from now, congratulations!";
+		}
+	}
+	else if(value==3){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="YOU GOT THE TREASURE, now head down, you are at level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now, progress by clicking to a grey space , unravaged by nature at the level below" ;
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="YOU GOT THE TREASURE, now head down, you are at level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high less than 100 years from now, progress by clicking to a grey space , unravaged by nature at the level below" ;
+		}
+	}
+	else if(value==4){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="This is level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now, progress by clicking the anywhere to a GREY space at the level below, I hope you remember !:)" ;
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="This is level "+(HazMinlevel+1)+" of a HazMin "+(HazMinheight)+" levels high less than 100 years from now, progress by clicking the anywhere to a GREY space at the level below, I hope you remember !:)" ;
+		}
+	}
+	else if(value==5){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="This is the exit of the HazMin "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now whose treasure you obtained, go into the glory of the night, congratulations !:)" ;
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="This is the exit of the HazMin "+(HazMinheight)+" levels high less than 100 years from now whose treasure you obtained, go into the glory of the night, congratulations !:)" ;
+		}
+	}
+	else if(value==6){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="YOU FOUND ANOTHER HAZMIN! you are at level "+(HazMinlevel+1)+" and the HazMin is "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now, progress by clicking the yellow exit to the next level" ;
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="YOU FOUND ANOTHER HAZMIN! you are at level "+(HazMinlevel+1)+" and the HazMin is "+(HazMinheight)+" levels high at least 100 years from now, progress by clicking the yellow exit to the next level" ;
+		}
+	}
+	else if(value==7){
+		if(agevalue>0){
+			document.getElementById("positioninfo").innerHTML="You made it to the top level, click the GOLD treasure, and you will head down this HazMin "+(HazMinheight)+" levels high at least "+(agevalue*100)+" years from now";
+		}
+		else{
+			document.getElementById("positioninfo").innerHTML="You made it to the top level, click the GOLD treasure, and you will head down this HazMin "+(HazMinheight)+" levels high at least 100 years from now";
+		}
+	}
+	else{//do nothing
+	}
+}
+
+function heightmessage(value){
+	if(value==0){
+		document.getElementById("HazMinLevel").innerHTML="You have not started the game yet^3";
+	}
+	else if(value==1){
+		document.getElementById("HazMinLevel").innerHTML=HazMinheight;
+	}
+	else if(value==2){
+		document.getElementById("HazMinLevel").innerHTML="The highest HazMin you tried to steal from was "+HazMinheight+" levels high, congratulations, try to make it higher next time";
+	}
+	else{//do nothing
+	}
+}
+
+function timermessage(value){
+	if(value==0){
+		document.getElementById("currenttime").innerHTML="You have not started the game yet^4";
+	}
+	else if(value==1){
+		document.getElementById("currenttime").innerHTML=HazMintimer;
+	}
+	else if(value==2){
+		document.getElementById("currenttime").innerHTML="Times up, see your complete time below";
+	}
+	else{//do nothing
+	}
+}
+
+function completetimemessage(value){
+	if(value==0){
+		document.getElementById("completetime").innerHTML="You have not started the game yet^5";
+	}
+	else if(value==1){
+		document.getElementById("completetime").innerHTML="You have all the time in the world, be patient! a wise HazMiner never rushes";
+	}
+	else if(value==2){
+		document.getElementById("completetime").innerHTML="Congratulations HazMiner, you spent "+HazMincompletetime+" seconds thiefing";
+	}
+	else{//do nothing
+	}
+}
+
+function KarneNyoutput(){
+	agemessage(document.getElementById("ageselect").value);
+}
+
+function setagevalue(){
+	agevalue=Number(document.getElementById("ageselect").value);
+}
+
+function HazMinclocker(){
+	incHMtimer();
+	timermessage(1);
+}
+
+function setHazMinsdira(){
+	HazMinsdira=0;
+}
+
+function switchHazMinsdira(){
+	if(HazMinsdira==0){
+		HazMinsdira=1;
+	}
+	else{
+		HazMinsdira=0;
+	}
+}
+
+function setHazMinsstate(){
+	HazMinsstate=0;
+}
+
+function switchHazMinsstate(){
+	if(HazMinsstate==0){
+		HazMinsstate=1;
+	}
+	else{
+		HazMinsstate=0;
+	}
+}
+
+function setHMlevel(){
+	HazMinlevel=0;
+}
+
+function incHMlevel(){
+	HazMinlevel++;
+}
+
+function decHMlevel(){
+	HazMinlevel--;
+}
+
+function setHMtimer(){
+	HazMintimer=0;
+}
+
+function incHMtimer(){
+	HazMintimer++;
+}
+
+function setHMheight(){
+	HazMinheight=2;
+}
+
+function incHMheight(){
+	HazMinheight++;
+}
+
+function setHMtotaltime(){
+	HazMincompletetime=0;
+}
+
+function incHMtotaltime(){
+	HazMincompletetime+=HazMintimer;
+}
+
+function setHazMins(){
+	HazMins=[];
+	var index1=0;
+	var index2=0;
+	var index3=0;
+	var tempx=0;
+	var tempy=0;
+	while(index1<HazMinheight){
+		var temparray1=[];
+		index2=0;
+		while(index2<(agevalue+2)){
+			index3=0;
+			var temparray2=[];
+			while(index3<(agevalue+2)){
+				temparray2.push(0);
+				index3++;
+			}
+			temparray1.push(temparray2);
+			index2++;
+		}
+		HazMins.push(temparray1);
+		index1++;
+	}
+	var greencolored=0;
+	var tenplace=0;
+	if(agevalue<7){
+		tenplace=1;
+	}
+	else if((agevalue>7)&&(agevalue<97)){
+		tenplace=2;
+	}
+	index1=0;
+	while(index1<HazMinheight){
+		greencolored=0;
+		while(greencolored<((Math.pow(2,agevalue+1))+(((agevalue+2)%2)*(Math.floor(Math.random()*10)%2)))){
+			while((greencolored<((Math.pow(2,agevalue+1))+(((agevalue+2)%2)*(Math.floor(Math.random()*10)%2))))){
+				tempx=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+				tempy=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+				if(HazMins[index1][tempx][tempy]==0){
+					HazMins[index1][tempx][tempy]=1;//1 = green space, nature has taken over, the hazards!
+					greencolored++;
+				}
+				else{//do nothing
+				} 
+			}
+		}
+		tempx=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+		tempy=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+		while(HazMins[index1][tempx][tempy]==1){
+			tempx=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+			tempy=(Math.floor(Math.random()*Math.pow(10,tenplace)))%(agevalue+2);
+		}
+		if(index1==0){ 
+			HazMins[index1][tempx][tempy]=4;
+		}
+		else if((index1>0)&&(index1<(HazMinheight-1))){  
+			HazMins[index1][tempx][tempy]=2;
+		}
+		else{  
+			HazMins[index1][tempx][tempy]=3;
+		}
+		index1++;
+	}
+}
+
+function outputHazMinsup(){ 
+	var tempcanvas=document.getElementById("HazMinSpace");
+	var tempcontext=tempcanvas.getContext("2d");
+	var tempcanvaspixels=tempcontext.createImageData(250,250);
+	var index1=0;
+	var index2=0;
+	while(index1<250){
+		index2=0;
+		while(index2<250){
+			if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==0){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==1){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==2){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 255;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==3){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 212;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 175;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 55;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==4){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 255;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else{
+			}
+			index2++;
+		}
+		index1++;
+	}
+	tempcontext.putImageData(tempcanvaspixels,0,0);
+}
+
+function outputHazMinsdown(){ 
+	var tempcanvas=document.getElementById("HazMinSpace");
+	var tempcontext=tempcanvas.getContext("2d");
+	var tempcanvaspixels=tempcontext.createImageData(250,250);
+	var index1=0;
+	var index2=0;
+	while(index1<250){
+		index2=0;
+		while(index2<250){
+			if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==0){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==1){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==2){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==3){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 128;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else if(HazMins[HazMinlevel][Math.floor(index1/(250/(agevalue+2)))][Math.floor(index2/(250/(agevalue+2)))]==4){
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+1] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+2] = 0;
+				tempcanvaspixels.data[(index1*4*250)+(index2*4)+3] = 255;
+			}
+			else{
+			}
+			index2++;
+		}
+		index1++;
+	}
+	tempcontext.putImageData(tempcanvaspixels,0,0);
+}
+
+function runHazMinsdira(){
+	if(HazMinsdira==0){
+		outputHazMinsup();
+	}
+	else if(HazMinsdira==1){
+		outputHazMinsdown();
+	}
+	else{
+	}
+}
+
+function clickHazMins(eventhandler){
+	if(HazMinsstate==1){
+		switchHazMinsstate();
+		var rect=document.getElementById("HazMinSpace").getBoundingClientRect(); 
+		var yup = Math.floor(eventhandler.clientX - rect.left); 
+		var xup = Math.floor(eventhandler.clientY - rect.top);
+		var tempcanvas=document.getElementById("HazMinSpace");
+		var tempcontext=tempcanvas.getContext("2d");
+		var tempcanvaspixels=tempcontext.getImageData(0,0,250,250);
+		if(HazMinsdira==0){//up
+			if(HazMinlevel==(HazMinheight-1)){
+				if((tempcanvaspixels.data[(xup*4*250)+(yup*4)+0] == 212)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+1] == 175)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+2] == 55)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+3] == 255)){
+					switchHazMinsdira();
+					runningChezo(3);
+				}
+				else{// do nothing
+				}
+			}
+			else if(HazMinlevel==(HazMinheight-2)){
+				if((tempcanvaspixels.data[(xup*4*250)+(yup*4)+0] == 255)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+1] == 255)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+2] == 0)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+3] == 255)){
+					incHMlevel();
+					runningChezo(7);
+				}
+				else{
+				}
+			}
+			else{
+				if((tempcanvaspixels.data[(xup*4*250)+(yup*4)+0] == 255)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+1] == 255)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+2] == 0)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+3] == 255)){
+					incHMlevel();
+					runningChezo(1);
+				}
+				else{
+				}
+			}
+		}
+		else if(HazMinsdira==1){
+			if(HazMinlevel>1){ 
+				if((HazMins[HazMinlevel-1][Math.floor(xup/(250/(agevalue+2)))][Math.floor(yup/(250/(agevalue+2)))])!=1){
+					decHMlevel();
+					runningChezo(4);
+				}
+				else if(HazMins[HazMinlevel-1][Math.floor(xup/(250/(agevalue+2)))][Math.floor(yup/(250/(agevalue+2)))]==1){
+					MalizaChezo0();
+				}				
+			}
+			else if(HazMinlevel==1){
+				if((HazMins[HazMinlevel-1][Math.floor(xup/(250/(agevalue+2)))][Math.floor(yup/(250/(agevalue+2)))])!=1){
+					decHMlevel();
+					runningChezo(5);
+				}
+				else if(HazMins[HazMinlevel-1][Math.floor(xup/(250/(agevalue+2)))][Math.floor(yup/(250/(agevalue+2)))]==1){
+					MalizaChezo0();
+				}
+			}
+			else if(HazMinlevel==0){
+				if((tempcanvaspixels.data[(xup*4*250)+(yup*4)+0] == 0)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+1] == 0)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+2] == 0)&&(tempcanvaspixels.data[(xup*4*250)+(yup*4)+3] == 255)){//black space thus exit, won game
+					clearInterval(chezotimer);
+					incHMtotaltime();
+					incHMheight();
+					setHMtimer();
+					chezotimer=setInterval(HazMinclocker,1000);
+					setHazMins();
+					switchHazMinsdira();
+					runningChezo(6);
+				}
+				else{//do nothing
+				}
+			}
+			else{
+			}
+		}
+		else{
+		}
+		switchHazMinsstate();
+	}
+	else{
+	}
+}
+
+function clearHazMins(){
+	var tempcanvas=document.getElementById("HazMinSpace");
+	var tempcontext=tempcanvas.getContext("2d");
+	var tempcanvaspixels=tempcontext.createImageData(250,250);
+	var index1=0;
+	var index2=0;
+	while(index1<250){
+		index2=0;
+		while(index2<250){
+			tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+			tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+			tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+			tempcanvaspixels.data[(index1*4*250)+(index2*4)+0] = 255;
+			index2++;
+		}
+		index1++;
+	}
+	tempcontext.putImageData(tempcanvaspixels,0,0);
+}
+
+function runningChezo(value){
+	situationmessage(value);
+	heightmessage(1);
+	completetimemessage(1);
+	runHazMinsdira();
+}
+
+function AnzaChezo0(){
+	systemmessage(0);
+	agemessage(0);
+	gamemessage(0);
+	situationmessage(0);
+	heightmessage(0);
+	timermessage(0);
+	completetimemessage(0);
+	clearHazMins();
+}
+
+function MalizaChezo0(){   
+	clearInterval(chezotimer);
+	switchHazMinsstate();
+	document.getElementById("HazMinSpace").removeEventListener("mousedown", clickHazMins); 
+	incHMtotaltime();
+	systemmessage(1);
+	gamemessage(2);
+	situationmessage(2);
+	heightmessage(2);
+	timermessage(2);
+	completetimemessage(2);
+	clearHazMins();
+	switchHazMinsstate(); 
+	chezostate=0;
+}
+
+function AnzaChezo(){
+	if(chezostate==0){
+		chezostate=2; 
+		document.getElementById("HazMinSpace").addEventListener("mousedown", clickHazMins); 
+		timermessage(1);
+		setagevalue();
+		setHMlevel();
+		setHMheight();
+		setHMtimer();
+		setHMtotaltime();
+		setHazMinsdira();
+		setHazMinsstate();
+		systemmessage(0);
+		gamemessage(1);
+		situationmessage(1);
+		heightmessage(1);
+		completetimemessage(1); 
+		chezotimer=setInterval(HazMinclocker,1000);
+		setHazMins();
+		runHazMinsdira();
+		switchHazMinsstate();//hazminsstate=1 now
+		chezostate=1;
+	}
+}
+
+function MalizaChezo(){
+	if(chezostate==1){
+		chezostate=2; 
+		clearInterval(chezotimer);
+		switchHazMinsstate();
+		document.getElementById("HazMinSpace").removeEventListener("mousedown", clickHazMins); 
+		incHMtotaltime();
+		systemmessage(1);
+		gamemessage(2);
+		situationmessage(2);
+		heightmessage(2);
+		timermessage(2);
+		completetimemessage(2);
+		clearHazMins();
+		switchHazMinsstate();
+		chezostate=0;
+	}
+}
+
+</script>
+<style>
+/*CSS*/
+</style>
+</head>
+<body onload="AnzaChezo0()">
+<a href="https://aalbc.com/tc/clubs/5-blackgameselite/" target="_blank"><img src="http://houyhnhnm.github.io/BlackGamesElite/BlackGamesElite%20Banner4.png" width="150"></img></a>
+<h1>MSinChe 5</h1>
+<h2>HazMin</h2>
+<p><i>Copyright 2021 Houyhnhnm </i></p>
+<p><span id="devmessage"></span></p>
+<p><b>System Message:</b><span id="messagespace1"></span></p>
+<p><b>KarneNy/Centuries old:</b><select id="ageselect" onchange="KarneNyoutput()">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><span id="agemessage"></span></p>
+<p><button onclick="AnzaChezo()">Anza</button><button onclick="MalizaChezo()">Maliza</button></p>
+<canvas id="HazMinSpace" width="250" height="250" ></canvas>
+<img id="HazMinSpaceAD" width="250" height="250" src="./HazMinAgecover.png" ></img>
+<p><b>Chezo/Game Message:</b><span id="messagespace2"></span></p>
+<p><b>Situation:</b><span id="positioninfo"></span></p>
+<p><b>Height of HazMin:</b><span id="HazMinLevel"></span></p>
+<p><b>Time of current theft:</b><span id="currenttime"></span></p>
+<p><b>Complete time treasure thiefing:</b><span id="completetime"></span></p>
+</body>
+</html> 
