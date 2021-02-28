@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSinChe 6 - MoyoSaa</title>
+<script>
+//Javascript-functions + variables
+var chezostate=0;
+var levelvalue=0;
+var pointsvalue=0;
+var pointsvalue2=0;
+var timevalue=0;
+var moyosaa=0;
+var minimoyodistance=10;
+var minimoyobuffer=15;
+var saax=0;
+var saay=0;
+var saacolor=0;
+var saastate=0;
+var saacounter=0;
+var chezotimer
+var saatimer 
+
+function setsaastate(){
+	saastate=0; 
+}
+
+function getsaastate(){
+	return saastate;
+}
+
+function putsaastate(value){
+	saastate=value;
+}
+
+function setsaacounter(){
+	saacounter=0;
+}
+
+function incsaacounter(){
+	saacounter++;
+}
+
+function getsaacounter(){
+	return saacounter;
+}
+
+function outputlevelvalue(condition){
+	if(condition==0){
+		document.getElementById("romancesmessage").innerHTML="Have not started the romantic journey yet";
+	}
+	else if(condition==1){
+		document.getElementById("romancesmessage").innerHTML=levelvalue;
+	}
+}
+
+function inclevel(){
+	levelvalue++;
+}
+
+function getlevelvalue(){
+	return levelvalue;
+}
+
+function setlevelvalue(){
+	levelvalue=0;
+}
+
+function outputpointsvalue(condition){
+	if(condition==0){
+		document.getElementById("datemessage").innerHTML="Have not started the romantic journey yet";
+		document.getElementById("datemessage2").innerHTML="Have not started the romantic journey yet";
+	}
+	else if(condition==1){
+		document.getElementById("datemessage").innerHTML=pointsvalue;
+		document.getElementById("datemessage2").innerHTML=pointsvalue2;
+	}
+}
+
+function incpoints(value){
+	pointsvalue+=value;
+}
+
+function decpoints(){
+	pointsvalue2++;
+}
+
+function getpointsvalue(){
+	return pointsvalue;
+}
+
+function setpointsvalue(){
+	pointsvalue=0;
+	pointsvalue2=0;
+}
+
+function outputtimevalue(condition){
+	if(condition==0){
+		document.getElementById("daysmessage").innerHTML="Have not started the romantic journey yet";
+	}
+	else if(condition==1){
+		document.getElementById("daysmessage").innerHTML=timevalue;
+	}
+	else if(condition==2){
+		if(levelvalue>0){
+			document.getElementById("daysmessage").innerHTML="Your heart survived "+levelvalue+" romances through "+pointsvalue+" good dates for "+timevalue+" days and now you are in love";
+		}
+		else{
+			document.getElementById("daysmessage").innerHTML="Your heart didn't need to survive any romances and you are in love";	
+		}
+	}
+}
+
+function inctime(){
+	timevalue++;
+}
+
+function getinctimevalue(){
+	inctime();
+	outputtimevalue(1);
+}
+
+function settimevalue(){
+	timevalue=0;
+}
+
+function setmoyo(){
+	var tempcanvas = document.getElementById("MoyoSaaTurubai");
+	var tempcontext = tempcanvas.getContext("2d");
+	tempcontext.clearRect(0,0,500,500);
+}
+
+function clickmoyo(eventhandler){
+	var rect=document.getElementById("MoyoSaaTurubai").getBoundingClientRect(); 
+	var xcoor = Math.floor(eventhandler.clientX - rect.left); 
+	var ycoor = Math.floor(eventhandler.clientY - rect.top);
+	var tempcanvas=document.getElementById("MoyoSaaTurubai");
+	var tempcontext=tempcanvas.getContext("2d");
+	var tempcanvaspixels=tempcontext.getImageData(0,0,500,500);
+	if((tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+0]==255)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+1]==192)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+2]==203)){//pink
+		if(getpointsvalue()>0){
+			decpoints();
+			setmoyo();
+			putsaastate(2);
+			KimbiaChezo();
+		}
+		else{
+			MalizaChezo0();
+		}
+	}
+	else if((tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+0]==255)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+1]==0)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+2]==0)){//red
+		incpoints(2);
+		setmoyo();
+		putsaastate(2);
+		if(Math.floor(getpointsvalue()/4)>getlevelvalue()){//points/10>level //3 dates
+			inclevel();
+		}
+		KimbiaChezo();
+	}
+	else if((tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+0]==0)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+1]==100)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+2]==0)){//green
+		incpoints(1);
+		setmoyo();
+		putsaastate(2);
+		if(Math.floor(getpointsvalue()/4)>getlevelvalue()){//points/10>level
+			inclevel();
+		}
+		KimbiaChezo();
+	}
+	else if((tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+0]==255)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+1]==255)&&(tempcanvaspixels.data[(ycoor*4*500)+(xcoor*4)+2]==255)){//white
+			MalizaChezo0();
+	}
+	else{
+		MalizaChezo0();
+	}
+}
+
+function randomsaa(){
+		saay=0;
+		while((saay<134+minimoyobuffer)||(saay>385-minimoyobuffer)){
+			saay=Math.floor(((Math.random()*1000)%(385-minimoyobuffer))+(134+minimoyobuffer));
+		}
+		if((saay>134)&&(saay<257)){
+			saax=Math.floor(((Math.random()*1000)%(430-minimoyobuffer))+(68+minimoyobuffer));
+			while((saax<(68+minimoyobuffer))||(saax>(430-minimoyobuffer))){
+				saax=Math.floor(((Math.random()*1000)%(430-minimoyobuffer))+(68+minimoyobuffer));
+			}
+		}
+		else if((saay>257)&&(saay<326)){
+			saax=Math.floor(((Math.random()*1000)%(360-minimoyobuffer))+(133+minimoyobuffer));
+			while((saax<(133+minimoyobuffer))||(saax>(360-minimoyobuffer))){
+				saax=Math.floor(((Math.random()*1000)%(360-minimoyobuffer))+(133+minimoyobuffer));
+			}
+		}
+		else if((saay>326)&&(saay<385)){
+			saax=Math.floor(((Math.random()*1000)%(293-minimoyobuffer))+(201+minimoyobuffer));
+			while((saax<(201+minimoyobuffer))||(saax>(293-minimoyobuffer))){
+				saax=Math.floor(((Math.random()*1000)%(293-minimoyobuffer))+(201+minimoyobuffer));
+			}
+		}
+}
+
+function saaoutput(){
+	if(getsaastate()==0){
+		setsaacounter();
+		randomsaa();
+		saacolor=Math.floor((Math.random()*10)%3);
+		var tempcanvas = document.getElementById("MoyoSaaTurubai");
+		var tempcontext = tempcanvas.getContext("2d");
+		if(saacolor==0){//pink
+			tempcontext.fillStyle = "#FFC0CB";
+		}
+		else if(saacolor==1){//red
+			tempcontext.fillStyle = "#FF0000";
+		}
+		else if(saacolor==2){//green
+			tempcontext.fillStyle = "#006400";
+		} 
+		tempcontext.fillRect(saay, saax, minimoyodistance, minimoyodistance);
+		putsaastate(1);
+	}
+	else if(getsaastate()==1){
+		incsaacounter();
+		if(getsaacounter()>(200-getlevelvalue()*4)){
+			if(getpointsvalue()>0){
+			decpoints();
+			}
+			KimbiaChezo();
+			setmoyo();//clear it
+			putsaastate(0);
+		}
+	}
+	else if(getsaastate()==2){
+		incsaacounter();
+		if(getsaacounter()>(200-getlevelvalue()*4)){
+			setmoyo();//clear it
+			putsaastate(0);
+		}
+	}
+}
+
+function AnzaChezo0(){
+	if(chezostate==0){
+		setlevelvalue();
+		setpointsvalue();
+		settimevalue();
+		outputlevelvalue(0);
+		outputpointsvalue(0);
+		outputtimevalue(0);
+		chezostate=1;
+	}
+}
+
+function MalizaChezo0(){
+	if(chezostate==2){
+		chezostate=0;
+		clearInterval(chezotimer);
+		document.getElementById("MoyoSaaTurubai").removeEventListener("mousedown", clickmoyo); 
+		clearInterval(saatimer);
+		setmoyo(); 
+		document.getElementById("MoyoSaaTurubai").style.backgroundImage = "url('MoyoSaaBackgroundFinished.png')"; 
+		outputtimevalue(2);
+		document.getElementById("RagMusic").pause();
+		chezostate=1;
+	}
+}
+
+function KimbiaChezo(){
+	if(chezostate==2){
+		outputlevelvalue(1);
+		outputpointsvalue(1);
+	}
+}
+
+function AnzaChezo(){
+	if(chezostate==1){
+		chezostate=0;
+		setlevelvalue();
+		setpointsvalue();
+		settimevalue();
+		setsaastate();
+		setsaacounter();
+		outputlevelvalue(1);
+		outputpointsvalue(1);
+		document.getElementById("MoyoSaaTurubai").style.backgroundImage = "url('MoyoSaaBackgroundV2.png')"; 
+		document.getElementById("MoyoSaaTurubai").addEventListener("mousedown", clickmoyo); 
+		chezotimer=setInterval(getinctimevalue,1000);
+		saatimer = setInterval(saaoutput,100);//tenth of a second
+		document.getElementById("RagMusic").play(); 
+		chezostate=2;
+	}
+}
+
+function MalizaChezo(){
+	if(chezostate==2){
+		chezostate=0;
+		clearInterval(chezotimer);
+		document.getElementById("MoyoSaaTurubai").removeEventListener("mousedown", clickmoyo); 
+		clearInterval(saatimer);
+		setmoyo();
+		document.getElementById("MoyoSaaTurubai").style.backgroundImage = "url('MoyoSaaBackgroundFinished.png')"; 
+		outputtimevalue(2);
+		document.getElementById("RagMusic").pause();
+		chezostate=1;
+	}
+}
+
+</script>
+<style>
+/*CSS*/
+
+#MoyoSaaTurubai { 
+  background-image: url(MoyoSaaBackgroundV2.png);  
+}
+</style>
+</head>
+<body onload="AnzaChezo0()">
+<h1>MSinChe 6</h1>
+<h2>MoyoSaa</h2>
+<p><i>Copyright 2021 Houyhnhnm </i></p>
+<p><button onclick="AnzaChezo()">Anza</button><button onclick="MalizaChezo()">Maliza</button></p>
+<p><b>Romances:</b><span id="romancesmessage"></span></p>
+<p><b>Good Dates:</b><span id="datemessage"></span></p>
+<p><b>Better Luck Next Times:</b><span id="datemessage2"></span></p>
+<p><b>Days:</b><span id="daysmessage"></span></p>
+<canvas id="MoyoSaaTurubai" width="500" height="500" ></canvas>
+<audio id="RagMusic" loop> 
+  <source src="ScottJoplin-RagtimeDance.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+</body>
+</html> 
