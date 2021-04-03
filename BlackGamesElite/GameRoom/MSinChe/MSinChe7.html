@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSinChe 7 - the legend of VuaKal </title>
+<script> 
+var chezostate=0;
+var chezorangi=0;
+var chezoukali=0;
+var rangistate=0;
+var ukalistate=0; 
+var rangitimer
+var ukalitimer
+var tempchunks= [];
+var tempconstraints = { audio:true}; 
+var tempstream 
+var tempmediarecorder 
+var minbrush=0;
+var maxbrush=10;
+var mincolor=0;
+var maxcolor=765;
+
+function stateswitch(){
+	if(chezostate==0){
+		chezostate=1;
+		document.getElementById("useimage").src="clickondrawspacegif.gif"
+	}
+	else if(chezostate==1){
+		chezostate=0;
+		document.getElementById("useimage").src="clickoffdrawspacegif.gif"
+	}
+	else{
+	}
+}
+
+function setchezostate(){
+	chezostate=0;
+}
+
+function setchezorangi(){
+	chezorangi=0;
+}
+
+function setchezoukali(){
+	chezoukali=0;
+}
+
+function setrangistate(){
+	rangistate=0;
+}
+
+function setukalistate(){
+	ukalistate=0;
+}
+
+function putchezorangi(value){
+	chezorangi=value;
+}
+
+function putchezoukali(value){
+	chezoukali=value;
+}
+
+function incrangistate(){
+	rangistate++;
+}
+
+function incukalistate(){
+	ukalistate++;
+}
+
+function returnchezostate(){
+	return chezostate;
+}
+
+function returnrangistate(){
+	return rangistate;
+}
+
+function returnukalistate(){
+	return ukalistate;
+}
+
+function returnchezorangi(){
+	return chezorangi;
+}
+
+function returnchezoukali(){
+	return chezoukali;
+}
+
+function resetter(){
+	document.getElementById("useimage").src="resetgif.gif";
+	setchezorangi();
+	setchezoukali();
+	displaychezorangi();
+	displaychezoukali();
+}
+
+function landuse1(){
+	stateswitch();
+}
+
+function landuse2(eventhandler){
+	if(returnchezostate()==1){
+		console.log("landuse2 in");
+		if((returnchezorangi()!=0)||(returnchezoukali()!=0)){
+			console.log("coloring");
+			var rect=document.getElementById("landofVuaKal").getBoundingClientRect(); 
+			var xcoor = Math.floor(eventhandler.clientX - rect.left); 
+			var ycoor = Math.floor(eventhandler.clientY - rect.top);
+			var tempcanvas=document.getElementById("landofVuaKal");
+			var tempcontext=tempcanvas.getContext("2d");
+			var tempcanvaspixels=tempcontext.getImageData(0,0,250,250);
+			var index1=ycoor-returnchezoukali();
+			var index2=0;
+			var tempvar=0;
+			while(index1<=(ycoor+returnchezoukali())){
+				index2=xcoor-returnchezoukali();
+				while(index2<=(xcoor+returnchezoukali())){
+					if((index1>=0)&&(index2>=0)){
+						tempvar=returnchezorangi();
+						if((tempvar>0)&&(tempvar<256)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+0]=tempvar;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+0]=255
+						}
+						if((tempvar>255)&&(tempvar<510)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+1]=tempvar-255;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+1]=255;
+						}
+						if((tempvar>509)&&(tempvar<765)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+2]=tempvar-510;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+2]=255;
+						}
+						tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+3]=255
+					}
+					else{
+					}
+					index2++;
+				}
+				index1++;
+			}
+			tempcontext.putImageData(tempcanvaspixels,0,0);
+		}
+		else{
+			console.log("color not set");
+		}
+	}
+	else{
+		console.log("landuse3 not in");
+	}
+}
+
+function landuse3(eventhandler){
+	if(returnchezostate()==1){
+		console.log("landuse3 in");
+		if((returnchezorangi()!=0)||(returnchezoukali()!=0)){
+			console.log("paint");
+			var rect=document.getElementById("landofVuaKal").getBoundingClientRect(); 
+			var xcoor = Math.floor(eventhandler.clientX - rect.left); 
+			var ycoor = Math.floor(eventhandler.clientY - rect.top);
+			var tempcanvas=document.getElementById("landofVuaKal");
+			var tempcontext=tempcanvas.getContext("2d");
+			var tempcanvaspixels=tempcontext.getImageData(0,0,250,250);
+			var index1=ycoor-returnchezoukali();
+			var index2=0;
+			while(index1<=(ycoor+returnchezoukali())){
+				index2=xcoor-returnchezoukali();
+				while(index2<=(xcoor+returnchezoukali())){
+					if((index1>=0)&&(index2>=0)){
+						tempvar=returnchezorangi();
+						if((tempvar>0)&&(tempvar<256)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+0]=tempvar;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+0]=255
+						}
+						if((tempvar>255)&&(tempvar<510)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+1]=tempvar-255;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+1]=255;
+						}
+						if((tempvar>509)&&(tempvar<765)){
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+2]=tempvar-510;
+						}
+						else{
+							tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+2]=255;
+						}
+						tempcanvaspixels.data[(ycoor*4*250)+(xcoor*4)+3]=255
+					}
+					else{
+					}
+					index2++;
+				}
+				index1++;
+			}
+			tempcontext.putImageData(tempcanvaspixels,0,0);
+		}
+		else{
+			console.log("color not set");
+		}
+	}
+	else{
+		console.log("landuse3 not");
+	}
+}
+
+function getrangi(){ 
+	if(navigator.mediaDevices.getUserMedia) {
+		if(returnrangistate()==0){
+			incrangistate();
+			try{
+				navigator.mediaDevices.getUserMedia(tempconstraints).then(function(stream) {
+					tempstream=stream;
+					tempmediarecorder= new MediaRecorder(tempstream);
+					tempchunks= [];
+					tempmediarecorder.ondataavailable = function(e) {
+						tempchunks.push(e.data);
+					}
+					tempmediarecorder.onstop = function(e) {
+						var tempblob = new Blob(tempchunks, { 'type' : 'audio/ogg; codecs=opus' });
+						tempblob.arrayBuffer().then(arraybuffervalue => {
+							var tempaudiocontext = new AudioContext();
+							tempaudiocontext.decodeAudioData(arraybuffervalue, function(buffer) {
+								var subvalue=0;
+								for (var channel = 0; channel < buffer.numberOfChannels; channel++) {
+									var bufferarray = buffer.getChannelData(channel);
+									for (var i = 0; i < buffer.length; i++) {
+										if (subvalue<bufferarray[i]){
+											subvalue=bufferarray[i];
+										}
+									}
+								}
+								if(subvalue<-1){
+									subvalue=mincolor; 
+								}
+								else if(subvalue>1){
+									subvalue=maxcolor; 
+								}
+								else if(subvalue<0){
+									subvalue=((maxcolor/2)-((maxcolor/2)*Math.abs(subvalue)));
+								}
+								else{
+									subvalue=((maxcolor/2)+((maxcolor/2)*Math.abs(subvalue)));
+								}
+								subvalue=Math.floor(subvalue);
+								putchezorangi(subvalue);
+								displaychezorangi();
+							},
+							function(e){ console.log("Error with decoding audio data" + e.err); });
+						})
+					}
+					tempmediarecorder.start()
+					console.log("LINE 537->RECORDING");
+					console.log("LINE 538->Recording state:"+tempmediarecorder.state); });
+			}
+			catch(err) {
+				console.log("faulty mediarecorder");
+			}
+		}
+		else if((returnrangistate()>0)&&(returnrangistate()<10)){
+			incrangistate();
+		}
+		else{
+			try {
+				tempmediarecorder.stop();
+				setrangistate();
+			}
+			catch(err) {
+				console.log("problem calling stop() function")
+				setrangistate();
+			}
+		}
+	}
+	else {
+		console.log("DO NOT HAVE navigator.mediaDevices.getUserMedia")
+	}
+}
+
+function colorset(){
+	document.getElementById("useimage").src="scrollovercolorgif.gif";
+	rangitimer=setInterval(getrangi,100);//tenth of a second
+}
+
+function colorend(){
+	clearInterval(rangitimer);
+	setrangistate();
+	try{
+		tempmediarecorder.stop();
+		console.log("MOVED CURSOR OFF BUTTON NO ERROR");
+	}
+	catch(err) {
+		console.log("MOVED CURSOR OFF BUTTON ERROR:"+err)
+	}
+}
+
+function getukali(){
+	if(navigator.mediaDevices.getUserMedia) {
+		if(returnukalistate()==0){
+			incukalistate();
+			try{
+				navigator.mediaDevices.getUserMedia(tempconstraints).then(function(stream) {
+					tempstream=stream;
+					tempmediarecorder= new MediaRecorder(tempstream);
+					tempchunks= [];
+					tempmediarecorder.ondataavailable = function(e) {
+						tempchunks.push(e.data);
+					}
+					tempmediarecorder.onstop = function(e) { 
+						var tempblob = new Blob(tempchunks, { 'type' : 'audio/ogg; codecs=opus' });
+						tempblob.arrayBuffer().then(arraybuffervalue => {
+							var tempaudiocontext = new AudioContext();
+							tempaudiocontext.decodeAudioData(arraybuffervalue, function(buffer) {
+								var subvalue=0;
+								for (var channel = 0; channel < buffer.numberOfChannels; channel++) {
+									var bufferarray = buffer.getChannelData(channel);
+									for (var i = 0; i < buffer.length; i++) {
+										if (subvalue<bufferarray[i]){
+											subvalue=bufferarray[i];
+										}
+									}
+								}
+								if(subvalue<-1){
+									subvalue=minbrush; 
+								}
+								else if(subvalue>1){
+									subvalue=maxbrush; 
+								}
+								else if(subvalue<0){
+									subvalue=((maxbrush/2)-((maxbrush/2)*Math.abs(subvalue)));
+								}
+								else{
+									subvalue=((maxbrush/2)+((maxbrush/2)*Math.abs(subvalue)));
+								}
+								subvalue=Math.floor(subvalue);
+								putchezoukali(subvalue);
+								displaychezoukali();
+							},
+							function(e){ console.log("Error with decoding audio data" + e.err); });
+						})
+					}
+					tempmediarecorder.start()
+					console.log("LINE 537->RECORDING");
+					console.log("LINE 538->Recording state:"+tempmediarecorder.state); });
+			}
+			catch(err) {
+				console.log("faulty mediarecorder");
+			}
+		}
+		else if((returnukalistate()>0)&&(returnukalistate()<10)){
+			incukalistate();
+		}
+		else{
+			try {
+				tempmediarecorder.stop();
+				setukalistate();
+			}
+			catch(err) {
+				console.log("problem calling stop() function")
+				setukalistate();
+			}
+		}
+	}
+	else {
+		console.log("DO NOT HAVE navigator.mediaDevices.getUserMedia")
+	}
+}
+
+function brushset(){
+	document.getElementById("useimage").src="scrolloverbrushgif.gif"
+	ukalitimer=setInterval(getukali,100);
+}
+
+function brushend(){
+	clearInterval(ukalitimer);
+	setukalistate();
+	try{
+		tempmediarecorder.stop();
+	}
+	catch(err) { 
+	}
+}
+
+function chezostate0(){
+	document.getElementById("useimage").src="intrositegif.gif";
+	setchezostate();
+	setchezorangi();
+	setchezoukali();
+	setrangistate();
+	setukalistate(); 
+	document.getElementById("landofVuaKal").addEventListener("mousemove", landuse2);
+	document.getElementById("landofVuaKal").addEventListener("mouseover", landuse3);
+}
+
+function displaychezorangi(){
+	document.getElementById("colorvalue").innerHTML=returnchezorangi();
+}
+
+function displaychezoukali(){
+	document.getElementById("brushvalue").innerHTML=returnchezoukali();
+}
+
+</script>
+<style>
+/*CSS*/
+#landofVuaKal{
+border:1px solid #000000;
+}
+</style>
+</head>
+<body onload="chezostate0()">
+<a href="https://aalbc.com/tc/clubs/5-blackgameselite/" target="_blank"><img src="http://houyhnhnm.github.io/BlackGamesElite/BlackGamesElite%20Banner4.png" width="150"></img></a>
+
+<h1>MSinChe 7</h1>
+<h2>the legend of VuaKal</h2>
+<div id="imageVuaKal"><img id="useimage" width="250" height="250"></img></div>
+<canvas id="landofVuaKal" onclick="landuse1()" width="250" height="250" ></canvas>
+<p>rangi<button id="colorbutton" onmouseover="colorset()" onmouseleave="colorend()">set</button><span id="colorvalue"></span> </p>
+<p>ukali<button id="brushbutton" onmouseover="brushset()" onmouseleave="brushend()">set</button><span id="brushvalue"></span> </p>
+<p>reset<button id="resetbutton" onclick="resetter()">neutralize</button></p>
+</body>
+</html>
