@@ -1,0 +1,471 @@
+<html>
+<head>
+<title> MSinChe 6 - AduiShirika</title>
+<script>
+//VARIABLES
+const playableboard = new Array(16);
+const uservariables = new Array(1); 
+
+//FUNCTIONS
+
+//BOARDSETUP FUNCTION
+function boardsetup(){
+	var bsindex=0;
+	const randomsource= Math.random();
+	var bssubsource1=0;
+	var bssubsource2=0;
+	while(bsindex<16){
+		if(bsindex==0){
+			bssubsource1=randomsource*10;
+		}else{
+			bssubsource1=bssubsource1*10;
+		}
+		bssubsource2=Math.floor(bssubsource1);
+		if(bssubsource2<5){
+			playableboard[bsindex]=0;//zero equals black 
+		}else{
+			playableboard[bsindex]=1;//one equals gray
+		}
+		bssubsource1=bssubsource1-bssubsource2;
+		bsindex++;
+	}
+	//alert("playableboard sequnece"+playableboard); 
+}
+
+
+//CHECKFINAL FUNCTION
+function checkfinal(){
+	var index=0;
+	var sum=0;
+	while(index<8){
+		sum=sum+playableboard[index];
+		index++;
+	}
+	if(sum==0){
+		//continue
+		while(index<16){
+			sum=sum+playableboard[index];
+			index++;
+		}
+		if(sum==8){
+			//alert("PRotected yourself from the truth, you are unchanged; it took you -> "+uservariables[0]+" moves");
+			document.getElementById("infoplace2").innerHTML="<h4 style=\"color:red\"><i style=\"background-color:black\">You have protected yourself from the truth, using "+uservariables[0]+" moves</i></h4>"
+			terminal();
+		}else{
+			//alert("not protected yourself from the truth")
+			document.getElementById("infoplace2").innerHTML="<h4 style=\"color:red\"><i style=\"background-color:black\">You haven't protected yourself from the truth yet</i></h4>"
+		}
+	}else{
+		//alert("not protected yourself from the truth")
+		document.getElementById("infoplace2").innerHTML="<h4 style=\"color:red\"><i style=\"background-color:black\">You haven't protected yourself from the truth yet</i></h4>"
+	}
+}
+
+//DISPLAYBOARD FUNCTION
+function displayboard(){
+	var dbindex=0;
+	while(dbindex<16){
+		if(playableboard[dbindex]==0){
+			document.getElementById("GameTable").rows[Math.floor(dbindex/4)].cells[dbindex-(Math.floor(dbindex/4)*4)].innerHTML="<img src=\"BOSS.png\" height=\"30px\" width=\"30px\"></img>";
+		}else{// playableboard[dbindex]==1
+			document.getElementById("GameTable").rows[Math.floor(dbindex/4)].cells[dbindex-(Math.floor(dbindex/4)*4)].innerHTML="<img src=\"USER.png\" height=\"30px\" width=\"30px\"></img>";
+		}
+		dbindex++;
+	}
+	//alert("IS playable board displayed?"); 
+}
+
+//MODULATEBOARD FUNCTION
+function modulateboard(rowval, columnval){
+	uservariables[0]++; 
+	var mbrow=0;
+	var mbcolumn=0;
+	var mbstate=0;
+	//alert("in modulateboard function ");
+	//switch
+	if(playableboard[(rowval*4)+columnval]==0){
+		playableboard[(rowval*4)+columnval]=1;
+	}else{
+		playableboard[(rowval*4)+columnval]=0;
+	}
+	//reversecheck - clockwise
+	const centerpiece=playableboard[(rowval*4)+columnval];
+
+	//0|360 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow-1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow--;
+	}
+	if(mbstate==2){
+		mbrow=mbrow+2;
+		while(mbrow<rowval){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow++;
+		}
+	}
+
+//45 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow-1;
+	mbcolumn=mbcolumn+1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&& (mbcolumn>=0)&& (mbcolumn<4)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow--;
+		mbcolumn++;
+	}
+	if(mbstate==2){
+		mbrow=mbrow+2;
+		mbcolumn=mbcolumn-2;
+		while((mbrow<rowval)&&(mbcolumn>columnval)){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow++;
+			mbcolumn--;
+		}
+	}
+
+//90 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbcolumn=mbcolumn+1;
+	mbstate=0;
+	while((mbcolumn<4) && (mbcolumn>=0)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbcolumn++;
+	}
+	if(mbstate==2){
+		mbcolumn=mbcolumn-2;
+		while(mbcolumn>columnval){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbcolumn--;
+		}
+	}
+
+//135 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow+1;
+	mbcolumn=mbcolumn+1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&& (mbcolumn>=0)&& (mbcolumn<4)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow++;
+		mbcolumn++;
+	}
+	if(mbstate==2){
+		mbrow=mbrow-2;
+		mbcolumn=mbcolumn-2;
+		while((mbrow>rowval)&&(mbcolumn>columnval)){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow--;
+			mbcolumn--;
+		}
+	}
+
+//180 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow+1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow++;
+	}
+	if(mbstate==2){
+		mbrow=mbrow-2;
+		while(mbrow>rowval){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow--;
+		}
+	}
+
+//225 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow+1;
+	mbcolumn=mbcolumn-1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&& (mbcolumn>=0)&& (mbcolumn<4)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow++;
+		mbcolumn--;
+	}
+	if(mbstate==2){
+		mbrow=mbrow-2;
+		mbcolumn=mbcolumn+2;
+		while((mbrow>rowval)&&(mbcolumn<columnval)){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow--;
+			mbcolumn++;
+		}
+	}
+
+//270 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbcolumn=mbcolumn-1;
+	mbstate=0;
+	while((mbcolumn<4) && (mbcolumn>=0)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbcolumn--;
+	}
+	if(mbstate==2){
+		mbcolumn=mbcolumn+2;
+		while(mbcolumn<columnval){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbcolumn++;
+		}
+	}
+
+//315 degrees
+
+	mbrow=rowval;
+	mbcolumn=columnval;
+	mbrow=mbrow-1;
+	mbcolumn=mbcolumn-1;
+	mbstate=0;
+	while((mbrow<4) && (mbrow>=0)&& (mbcolumn>=0)&& (mbcolumn<4)&&(mbstate!=-1)&&(mbstate!=2)){
+		if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			mbstate=1;
+		}else if((mbstate==0)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=-1;
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]!=centerpiece)){
+			//keep mbstate the same
+		}else if((mbstate==1)&&(playableboard[(mbrow*4)+mbcolumn]==centerpiece)){
+			mbstate=2
+		}else{
+		}
+		mbrow--;
+		mbcolumn--;
+	}
+	if(mbstate==2){
+		mbrow=mbrow+2;
+		mbcolumn=mbcolumn+2;
+		while((mbrow<rowval)&&(mbcolumn<columnval)){
+			playableboard[(mbrow*4)+mbcolumn]=centerpiece;
+			mbrow++;
+			mbcolumn++;
+		}
+	}
+
+//displayboard
+	displayboard();
+//checkiffinal value
+	checkfinal();
+}
+
+//GAMETABLEUSE FUNCTION
+function gametableuse(clickedelement){
+	var gturow=clickedelement.parentNode.rowIndex;
+	var gtucolumn=clickedelement.cellIndex;
+	var x=document.getElementById("initbutton");
+	let checkstring="visible";
+//clickedelement.parentNode.rowIndex
+//clickedelement.cellIndex
+	if(checkstring.includes(x.style.visibility)){//do nothing, game has not started
+		//alert("game has not started");
+		document.getElementById("infoplace").innerHTML="<h4><i>GAME HAS NOT STARTED CLICK ANZA button above to begin</i></h4>"
+	}else{//game has started
+		modulateboard(gturow, gtucolumn);
+	}
+}
+
+
+//ONLOADER FUNCTION
+function onloader(){
+	document.getElementById("initbutton").style.visibility="visible";
+	document.getElementById("endbutton").style.visibility="hidden";
+}
+
+//SWITCHBUTTON FUNCTION
+function switchbutton(){
+	document.getElementById("initbutton").style.visibility="hidden";
+	document.getElementById("endbutton").style.visibility="visible";
+}
+
+//RESTARTFUNCTION
+function restartfunction(){
+	var rsfindex=0;
+	while(rsfindex<16){
+		document.getElementById("GameTable").rows[Math.floor(rsfindex/4)].cells[rsfindex-(Math.floor(rsfindex/4)*4)].innerHTML="<img src=\"BOSS.png\" height=\"30px\" width=\"30px\"></img>";
+		rsfindex++;
+	}
+	document.getElementById("initbutton").style.visibility="visible";
+	document.getElementById("endbutton").style.visibility="hidden";
+}
+
+//INITIAL FUNCTION
+function initial(){
+	//alert("initial button used, initial function accessed");
+	document.getElementById("infoplace").innerHTML="<h4><i>GAME HAS STARTED- click squares in game table, reversing their value to match the goal table</i></h4>"
+	document.getElementById("BossHeadplace").innerHTML="<img src=\"gameplaygifUSED.gif\" width=\"150px\"></img>"
+	uservariables[0]=0; 
+	boardsetup();
+	displayboard();
+	switchbutton();
+}
+
+//TERMINAL FUNCTION
+function terminal(){
+	//alert("terminal button used, terminal function accessed");
+	document.getElementById("infoplace").innerHTML="<h4><i>After you start the game make the Game Table equivalent to the Goal Table</i></h4>"
+	document.getElementById("BossHeadplace").innerHTML="<img src=\"gameheadeyesclosedused.png\" width=\"150px\"></img>"
+	restartfunction();
+}
+
+</script>
+<style>
+body {background-color: green;}
+</style>
+</head>
+<body onload="onloader()">
+<a href="https://aalbc.com/tc/clubs/5-blackgameselite/" target="_blank"><img src="http://houyhnhnm.github.io/BlackGamesElite/BlackGamesElite%20Banner4.png" width="150"></img></a>
+<h1>MSinChe 6</h1>
+<h2>AduiShirika</h2>
+<h3>for the <b><a style="color:purple" href="https://www.deviantart.com/hddeviant/art/Head-of-Hatshepsut-901829671" target="_blank">Head of Hatshepsut</a></b> story</h3>
+<button id="initbutton" onclick="initial()">Anza/Start</button><button id="endbutton" onclick="terminal()">Maliza/Finish</button>
+<div id="BossHeadplace">
+<!--<h4><i><u>DIV for head graphic</u></i></h4>-->
+<img src="gameheadeyesclosedused.png" width="150px"></img>
+</div>
+<div id="infoplace">
+<!--infoplace space-->
+<h4><i>After you start the game make the Game Table equivalent to the Goal Table</i></h4>
+</div>
+<div id="infoplace2">
+<!--infoplace space-->
+</div>
+<div id="ASgameplace">
+<!--<h4>DIV for game space</h4>-->
+<h5>Game table</h5>
+<table id="GameTable">
+  <tr>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td onclick="gametableuse(this)"><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+</table>
+<h5>Goal Table</h5>
+<table id="GoalTable">
+  <tr>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+    <td><img src="BOSS.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+  </tr>
+  <tr>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+    <td><img src="USER.png" height="30px" width="30px"></img></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
