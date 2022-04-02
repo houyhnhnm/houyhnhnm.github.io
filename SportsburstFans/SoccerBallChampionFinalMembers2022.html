@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Soccer Ball Champion Final Members 2022</title>
+<script>
+//Javascript
+var firstval1;
+var firstval2;
+var firstval3;
+var secondval1;
+var secondval2;
+var secondval3;
+var gamestate=0;
+var alphabet= ["A","B","C","D","E","F","G","H"]
+
+function getfirst(){
+	if(gamestate==0){
+		firstval1=document.getElementById("SBCteams").options.selectedIndex;
+		firstval2=Number(document.getElementById("SBCteams").options[document.getElementById("SBCteams").options.selectedIndex].value.substr(0, 1));
+		firstval3=document.getElementById("SBCteams").options[document.getElementById("SBCteams").options.selectedIndex].text;
+		document.getElementById("viewoutput").innerHTML="you chose "+firstval3+" of group "+alphabet[firstval2];
+		gamestate=1;
+	}
+	else{
+		document.getElementById("viewoutput").innerHTML="please choose the second team";
+	}
+}
+
+function getsecond(){
+	if(gamestate==1){
+		secondval1=document.getElementById("SBCteams").options.selectedIndex;
+		secondval2=Number(document.getElementById("SBCteams").options[document.getElementById("SBCteams").options.selectedIndex].value.substr(0, 1));
+		secondval3=document.getElementById("SBCteams").options[document.getElementById("SBCteams").options.selectedIndex].text;
+		if(secondval1==firstval1){
+			/*same team selected, try again*/
+			document.getElementById("viewoutput").innerHTML="you chose the same team, try again";
+		}
+		else if(secondval2==firstval2){
+			/*two team from same group*/
+			document.getElementById("viewoutput").innerHTML=firstval3+" contra "+secondval3+" can be in the final if both place in the top two of group "+alphabet[secondval2]+", any order";
+			
+		}
+		else if(secondval2%2==firstval2%2){
+			/*two teams are both even or both odd */
+			if(secondval2%2==0){
+				/*two teams are both even*/
+				document.getElementById("viewoutput").innerHTML=firstval3+" contra "+secondval3+" can be in the final if "+firstval3+" place second in group "+alphabet[firstval2]+" and "+secondval3+" place first in group "+alphabet[secondval2]+
+				" OR "+firstval3+" place first in group "+alphabet[firstval2]+" and "+secondval3+" place second in group "+alphabet[secondval2]+": now you can choose another team first";
+			}
+			else{
+				/*two teams are both odd*/
+				document.getElementById("viewoutput").innerHTML=firstval3+" contra "+secondval3+" can be in the final if "+firstval3+" place first in group "+alphabet[firstval2]+" and "+secondval3+" place second in group "+alphabet[secondval2]+
+				" OR "+firstval3+" place second in group "+alphabet[firstval2]+" and "+secondval3+" place first in group "+alphabet[secondval2]+": now you can choose another team first";
+			}
+		}
+		else{
+			/*one team is odd while one team is even*/
+			if(secondval2%2==0){
+				/*first team is odd, second team is even*/
+				document.getElementById("viewoutput").innerHTML=firstval3+" contra "+secondval3+" can be in the final if "+firstval3+" place second in group "+alphabet[firstval2]+" and "+secondval3+" place second in group "+alphabet[secondval2]+
+				" OR "+firstval3+" place first in group "+alphabet[firstval2]+" and "+secondval3+" place first in group "+alphabet[secondval2]+": now you can choose another team first";
+			}
+			else{
+				/*first team is even, second team is odd*/
+				document.getElementById("viewoutput").innerHTML=firstval3+" contra "+secondval3+" can be in the final if "+firstval3+" place second in group "+alphabet[firstval2]+" and "+secondval3+" place second in group "+alphabet[secondval2]+
+				" OR "+firstval3+" place first in group "+alphabet[firstval2]+" and "+secondval3+" place first in group "+alphabet[secondval2]+": now you can choose another team first";			}
+		}
+		gamestate=0;
+	}
+	else{
+		document.getElementById("viewoutput").innerHTML="please choose the first team";
+	}
+}
+
+
+</script>
+<style>
+/*CSS*/
+body{background-color:purple;}
+a{color:yellow;}
+</style>
+</head>
+<body>
+<h1>Soccer Ball Champion Final Members 2022</h1>
+<h2><span>from </span><a href="https://www.facebook.com/groups/862391814168838/" target="_blank">Sportsburstfans</a></h2>
+<label for="SBCteams">choose a team:</label>
+<select name="SBCteams" id="SBCteams">
+	<option value="1Qatar">Qatar</option>
+	<option value="1Ecuador">Ecuador</option>
+	<option value="1Senegal">Senegal</option>
+	<option value="1Netherlands">Netherlands</option>
+	<option value="2England">England</option>
+	<option value="2Iran">Iran</option>
+	<option value="2USA">USA</option>
+	<option value="2Wales|Scotland|Ukraine">Wales|Scotland|Ukraine</option>
+	<option value="3Argentina">Argentina</option>
+	<option value="3SaudiArabia">SaudiArabia</option>
+	<option value="3Mexico">Mexico</option>
+	<option value="3Poland">Poland</option>
+	<option value="4France">France</option>
+	<option value="4UAE|Australia|Peru">UAE|Australia|Peru</option>
+	<option value="4Denmark">Denmark</option>
+	<option value="4Tunisia">Tunisia</option>
+	<option value="5Spain">Spain</option>
+	<option value="5CostaRica|NewZealand">CostaRica|NewZealand</option>
+	<option value="5Germany">Germany</option>
+	<option value="5Japan">Japan</option>
+	<option value="6Belgium">Belgium</option>
+	<option value="6Canada">Canada</option>
+	<option value="6Morocco">Morocco</option>
+	<option value="6Croatia">Croatia</option>
+	<option value="7Brasil">Brasil</option>
+	<option value="7Serbia">Serbia</option>
+	<option value="7Switzerland">Switzerland</option>
+	<option value="7Cameroon">Cameroon</option>
+	<option value="8Portugal">Portugal</option>
+	<option value="8Ghana">Ghana</option>
+	<option value="8Uruguay">Uruguay</option>
+	<option value="8SouthKorea">SouthKorea</option>
+  </select>
+<button id="firstteam" onclick="getfirst()"> First Team</button>
+<button id="secondteam" onclick="getsecond()">Second Team</button>
+<div>
+<!-- output-->
+<span id="viewoutput">OUTPUT VIEWED HERE</span>
+</div>
+Enjoy my tumblr <a href="https://rmfantasysetpieces1.tumblr.com/" target="_blank">Richard Murray's Fanatacism</a>
+</body>
+</html> 
