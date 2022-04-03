@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spin Bowlers- prototype 1</title>
+<script>
+//Javascript
+
+var playlatch=0;
+var shufflelatch=1;
+var shiftcount=0;
+var shufflecount=0;
+var spinstrength=1;
+var lanelength=1;
+var originalshuffle= [0,1,2,3,4,5,6];
+var playingshuffle= [0,1,2,3,4,5,6];
+var spinnervalue;
+var spinnercount;
+var lanecount;
+var laneindex;
+var spinmuscle;
+var laneoutput= [];
+laneoutput.push("-");
+var spinlock=0;
+var finalpoints=0;
+var maxlanelength=20;
+//var lanesector=3;//sectors of lane to gauge speed
+var sectorstrength=1;
+
+function reboot(){
+	clearInterval(spintimer);
+	document.getElementById("shufflespace").innerHTML="";
+	document.getElementById("shufflecountplace").innerHTML="";
+	document.getElementById("shiftcountplace").innerHTML="";
+	document.getElementById("resultspace").innerHTML="";
+	document.getElementById("lanespace").innerHTML="";
+	shufflelatch=1;
+	shiftcount=0;
+	shufflecount=0;
+	spinstrength=1;
+	lanelength=1;
+	originalshuffle= [0,1,2,3,4,5,6];
+	playingshuffle= [0,1,2,3,4,5,6];
+	spinnervalue;
+	spinnercount;
+	lanecount;
+	laneindex;
+	spinmuscle;
+	laneoutput= [];
+	laneoutput.push("-");
+	spinlock=0;
+	finalpoints=0;
+	maxlanelength=20;
+	lanesector=3;
+	sectorstrength=1;
+	playlatch=0;
+}
+
+function outputshuffle(){
+	if(playlatch==0){
+		if(shufflelatch==0){
+		document.getElementById("shufflespace").innerHTML=playingshuffle;
+		}
+	}
+}
+
+function outputshufflecount(){
+	if(playlatch==0){
+		if(shufflelatch==0){
+			document.getElementById("shufflecountplace").innerHTML=shufflecount;
+		}
+	}
+}
+
+function outputshiftcount(){
+	if(playlatch==0){
+		if(shufflelatch==0){
+			document.getElementById("shiftcountplace").innerHTML=shiftcount;
+		}
+	}
+}
+
+function shiftshuffle(inputindex){
+	if(playlatch==0){
+		if(shufflelatch==0){
+			shiftcount++;
+			var tempvar1=playingshuffle[inputindex]
+			if(inputindex<6){
+				tempvar2=playingshuffle[inputindex+1];
+				playingshuffle[inputindex]=tempvar2;
+				playingshuffle[inputindex+1]=tempvar1;
+			}
+			else{
+				tempvar2=playingshuffle[0];
+				playingshuffle[inputindex]=tempvar2;
+				playingshuffle[0]=tempvar1;
+			}
+			outputshuffle();
+			outputshiftcount();
+		}
+	}
+}
+
+function shuffleget(){
+	if(playlatch==0){
+		shufflecount++;
+		shiftcount=0;
+		var tempvar;
+		var loopvar=0;
+		var indexvar=0;
+		var tempshuffle= [0,1,2,3,4,5,6];
+		while(indexvar<7){
+			tempvar=Math.floor(Math.random() * 17) + (-7);
+			while(indexvar!=loopvar){
+				if(tempvar==tempshuffle[loopvar]){
+					tempvar=Math.floor(Math.random() * 17) + (-7);
+					loopvar=0;
+				}
+				else{
+					loopvar++;
+				}
+			}
+			tempshuffle[indexvar]=tempvar;
+			if(tempvar>0){
+				originalshuffle[indexvar]=tempvar-1;
+			}
+			else{
+				originalshuffle[indexvar]=tempvar;
+			}
+			loopvar=0;
+			indexvar++;
+		}
+		playingshuffle[0]=originalshuffle[0];
+		playingshuffle[1]=originalshuffle[1];
+		playingshuffle[2]=originalshuffle[2];
+		playingshuffle[3]=originalshuffle[3];
+		playingshuffle[4]=originalshuffle[4];
+		playingshuffle[5]=originalshuffle[5];
+		playingshuffle[6]=originalshuffle[6];
+		shufflelatch=0;
+		outputshuffle();
+		outputshufflecount();
+		outputshiftcount();
+	}
+}
+
+function spininc(){
+	if(playlatch==0){
+		if(spinstrength<20){
+			spinstrength++;
+			document.getElementById("spinmeter").value=spinstrength;
+		}
+	}
+}
+
+function spindec(){
+	if(playlatch==0){
+		if(spinstrength>1){
+			spinstrength--;
+			document.getElementById("spinmeter").value=spinstrength;
+		}
+	}
+}
+
+function sectorinc(){
+	if(playlatch==0){
+		if(sectorstrength<4){
+			sectorstrength++;
+			document.getElementById("lanesector").value=sectorstrength;
+		}
+	}
+}
+
+function sectordec(){
+	if(playlatch==0){
+		if(sectorstrength>1){
+			sectorstrength--;
+			document.getElementById("lanesector").value=sectorstrength;
+		}
+	}
+}
+
+function laneinc(){
+	if(playlatch==0){
+		if(lanelength<20){
+			lanelength++;
+			laneoutput.push("-");
+			document.getElementById("lanemeter").value=lanelength;
+		}
+	}
+}
+
+function lanedec(){
+	if(playlatch==0){
+		if(lanelength>1){
+			lanelength--;
+			laneoutput.pop();
+			document.getElementById("lanemeter").value=lanelength;
+		}
+	}
+}
+
+function endspintimer(){
+	clearInterval(spintimer);
+}
+
+
+function spintimer(){
+	if((spinlock==0)&&(playlatch==1)){
+		spinnercount++;
+		if(spinnercount<spinmuscle){
+			if(spinnervalue==7){
+				spinnervalue=1;
+			}
+			else{
+				spinnervalue++;
+			}
+		}
+		else{
+			spinlock=1;
+			if(spinnervalue==7){
+				spinnervalue=1;
+			}
+			else{
+				spinnervalue++;
+			}
+			laneoutput[lanecount]=spinnervalue;
+			document.getElementById("lanespace").innerHTML=laneoutput
+			spinnercount=0;
+			lanecount++;
+			if((playingshuffle[spinnervalue-1]==-7) ||(playingshuffle[spinnervalue-1]==7)||((playingshuffle[spinnervalue-1]!=8)&&(playingshuffle[spinnervalue-1]+spinnervalue>7))||((playingshuffle[spinnervalue-1]!=8)&&(playingshuffle[spinnervalue-1]+spinnervalue<1))){
+				endspintimer();
+				document.getElementById("resultspace").innerHTML=finalpoints+ "points";
+			}
+			else if(lanecount==lanelength){
+				endspintimer();
+				if(playingshuffle[spinnervalue-1]==8){
+					finalpoints=finalpoints+10;
+					document.getElementById("resultspace").innerHTML=finalpoints+" points";
+				}
+				else{
+					var pineval= [1,1,2,2,2,1,1];
+					var temppy=playingshuffle[spinnervalue-1];
+					while(temppy!=0){
+						if(temppy>0){
+							finalpoints=finalpoints+pineval[spinnervalue-1+temppy];
+							temppy--;
+						}
+						else if(temppy<0){
+							finalpoints=finalpoints+pineval[spinnervalue-1+temppy];
+							temppy++;
+						}
+					}
+					finalpoints=finalpoints+pineval[spinnervalue-1];
+					document.getElementById("resultspace").innerHTML=finalpoints+" points";
+				}
+			}
+			else{
+				if(playingshuffle[spinnervalue-1]==8){
+					finalpoints=finalpoints+1;
+				}
+				else{
+					//just continue absent adding points
+				}
+				spinlock=0;
+			}
+		}
+	}
+	else{
+	}
+}
+
+function spinner(){
+	if((playlatch==0)&&(shufflelatch==0)){
+		playlatch=1;
+		finalpoints=0;
+		spinnervalue=Math.floor(Math.random() * 7) + (1);
+		spinnercount=0;
+		lanecount=0;
+		spinlock=0;
+		spinmuscle=spinstrength;
+		setInterval(spintimer, Math.floor((1000/(maxlanelength/sectorstrength))/spinmuscle));
+	}
+	else{
+	}
+}
+
+
+
+</script>
+<style>
+/*CSS*/
+</style>
+</head>
+<body>
+<h2>Spin Bowlers- prototype 1</h2>
+<!-- shifters-->
+<div style="background-color:gold"><!--color:yellow-->
+<h3>Shifts: <span id="shiftcountplace"></span></h3>
+<button type="button" onclick="shiftshuffle(0)">]</button>
+<button type="button" onclick="shiftshuffle(1)">]</button>
+<button type="button" onclick="shiftshuffle(2)">]</button>
+<button type="button" onclick="shiftshuffle(3)">]</button>
+<button type="button" onclick="shiftshuffle(4)">]</button>
+<button type="button" onclick="shiftshuffle(5)">]</button>
+<button type="button" onclick="shiftshuffle(6)">]</button>
+<p></p>
+</div>
+<!--shuffle-->
+<div style="background-color:yellow"><!--color:gold-->
+<h3>Shuffles: <span id="shufflecountplace"></span></h3>
+<button type="button" onclick="shuffleget()">SHUFFLE</button>
+<h3>SHUFFLED CARDS: <span id="shufflespace"></span></h3>
+</div>
+<!-- spin-->
+<div style="background-color:gold"><!--color:yellow-->
+<h3><label for="spinmeter">Spin Strength:</label><meter id="spinmeter" value="1" min="0" max="20">spin strength</meter> <button type="button" onclick="spininc()">↑</button><button type="button" onclick="spindec()">↓</button> </h3>
+<button type="button" onclick="spinner()">SPIN</button>
+</div>
+<!--LANE-->
+<div style="background-color:yellow"><!--color:gold-->
+<h3><label for="lanemeter">Lane Length:</label><meter id="lanemeter" value="1" min="0" max="20">lane length</meter> <button type="button" onclick="laneinc()">↑</button><button type="button" onclick="lanedec()">↓</button> </h3>
+<h3><label for="lanesector">Lane Sector:</label><meter id="lanesector" value="1" min="0" max="4">lane sectors</meter> <button type="button" onclick="sectorinc()">↑</button><button type="button" onclick="sectordec()">↓</button> </h3>
+<h3>LANE Result: <span id="lanespace"></span></h3>
+</div>
+<!- results-->
+<div style="background-color:gold"><!--color:yellow-->
+<h3>RESULT: <span id="resultspace"></span></h3>
+</div>
+<div style="background-color:yellow">
+<button type="button" onclick="reboot()">TRY AGAIN</button>
+</div>
+</body>
+</html> 
