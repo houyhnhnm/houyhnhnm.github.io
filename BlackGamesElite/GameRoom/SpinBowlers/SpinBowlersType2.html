@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Spin Bowlers- Type 2</title>
+<meta charset="UTF-8">
+<meta name="description" content="Spin Bowlers- Type 2 game for more information go to https://www.deviantart.com/hddeviant/gallery/82421031/three-emoji-s-challenge-2022">
+<meta name="keywords" content="blackgameselite, richardmurray, github, aalbc">
+<meta name="author" content="Richard Murray">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="text/html">
+<script>
+//Javascript
+
+//variables
+
+var bowlingvariable=0;
+var shufflingvariable=0;
+
+//bowlslot variables
+var bowlslot=[];
+var bowlstart=0;
+var bowlturn=100;
+var bowlturncontrol=[];
+var timecontroller;
+
+//cards variables
+
+var cardsarray=[];
+var numshuffles;
+var numshifts;
+
+//functions
+
+//bowlslot functions
+
+function initbowlarrays(){
+	var index=0;
+	while(index<7){
+		bowlslot.push(Math.floor((Math.random() * 7) + 0));//0-6
+		bowlturncontrol.push(0);
+		index++;
+	}
+}
+
+function outputbowlslot(){
+	document.getElementById("bowlslotspace").innerHTML=bowlslot;
+}
+
+function initbowlstartturn(){
+	var index=0;
+	while(index<7){
+		bowlturncontrol[index]=45+(Math.abs(index-bowlstart)*5);
+		index++;
+	}
+}
+
+function getbowlresults(){
+	var spinbowlresults=0;
+	var index=0;
+	var subvalue=0;
+	while(index<7){
+		
+		if(cardsarray[index]<7){
+			subvalue=cardsarray[index];
+			if(((subvalue+bowlslot[index])<7)&&((subvalue+bowlslot[index])>=0)){
+				subvalue=subvalue+bowlslot[index];
+			}
+			if(index==2|3|4){
+				subvalue=subvalue*2;
+			}
+			subvalue=subvalue+(7-Math.abs(index-bowlstart));
+		}
+		else if(cardsarray[index]==7|8){
+			subvalue=0;
+		}
+		else if((cardsarray[index]>8)&&(cardsarray[index]<16)){
+			subvalue=cardsarray[index]-15;
+			if(((subvalue+bowlslot[index])<7)&&((subvalue+bowlslot[index])>=0)){
+				subvalue=subvalue+bowlslot[index];
+			}
+			if(index==2|3|4){
+				subvalue=subvalue*2;
+			}
+			subvalue=subvalue+(7-Math.abs(index-bowlstart));
+		}
+		else{
+			if(index==bowlslot[index]){
+				subvalue=14;
+			}
+			else{
+				subvalue=7;
+			}
+			if(index==2|3|4){
+				subvalue=subvalue*2;
+			}
+			subvalue=subvalue+(7-Math.abs(index-bowlstart));
+		}
+		spinbowlresults=spinbowlresults+subvalue;
+		index++;
+	}
+	spinbowlresults=spinbowlresults-(numshuffles*5)-numshifts;
+	document.getElementById("resultmessages").innerHTML="you scored"+spinbowlresults;
+}
+
+function bowlplay(){
+	var index=0;
+	var endtimer=0;
+	while(index<7){
+		if(bowlturncontrol[index]>15){
+			bowlturncontrol[index]=bowlturncontrol[index]-1;
+			if(bowlslot[index]<7){
+				bowlslot[index]=bowlslot[index]+1;
+			}
+			else{
+				bowlslot[index]=0;
+			}
+		}
+		else if(bowlturncontrol[index]>10){
+			bowlturncontrol[index]=bowlturncontrol[index]-1;
+			if(bowlslot[index]%2==0){
+				if(bowlslot[index]<7){
+					bowlslot[index]=bowlslot[index]+1;
+				}
+				else{
+					bowlslot[index]=0;
+				}
+			}
+			else{}
+		}
+		else if(bowlturncontrol[index]>5){
+			bowlturncontrol[index]=bowlturncontrol[index]-1;
+			if(bowlslot[index]%3==0){
+				if(bowlslot[index]<7){
+					bowlslot[index]=bowlslot[index]+1;
+				}
+				else{
+					bowlslot[index]=0;
+				}
+			}
+			else{}
+		}
+		else if(bowlturncontrol[index]==0){
+			endtimer++;
+		}
+		else{
+			if(Math.floor((Math.random() * 10) + 0)%2==0){
+				if(bowlturncontrol[index]>0){
+					bowlturncontrol[index]=0;
+					if(bowlslot[index]<7){
+						bowlslot[index]=bowlslot[index]+1;
+					}
+					else{
+						bowlslot[index]=0;
+					}
+				}
+				else{}
+			}
+			else if(Math.floor((Math.random() * 10) + 0)%2==1){
+				if(bowlturncontrol[index]>0){
+					bowlturncontrol[index]=bowlturncontrol[index]-1;
+					if(bowlslot[index]<7){
+						bowlslot[index]=bowlslot[index]+1;
+					}
+					else{
+						bowlslot[index]=0;
+					}
+				}
+				else{}
+			}
+			else{}
+		}
+		index++;
+	}
+	outputbowlslot();
+	if(endtimer==6){
+		clearInterval(timecontroller);
+		getbowlresults();
+		bowlingvariable=0;
+		shufflingvariable=0;
+		numshifts=0;
+		numshuffles=0;
+	}
+}
+
+function bowlplayrun(){
+	if((bowlingvariable==0)&&(shufflingvariable!=0)){
+		bowlingvariable=1;
+		initbowlstartturn();
+		document.getElementById("statusmessages").innerHTML="SPINBOWL!";
+		timecontroller=setInterval(bowlplay, bowlturn);
+	}
+	else{
+		document.getElementById("statusmessages").innerHTML="bowling already or need to shuffle, so you can not bowl right now";
+	}
+}
+
+//bowl start position functions
+
+function outputbowlstart(){
+	document.getElementById("startdisplay").innerHTML=bowlstart;
+}
+
+function bowlstartup(){
+	if(bowlingvariable==0){
+		if(bowlstart<6){
+			bowlstart++;
+		}
+		outputbowlstart();
+		document.getElementById("statusmessages").innerHTML="change bowling start position to the right!";
+	}
+	else{
+		document.getElementById("statusmessages").innerHTML="can not change start position of bowling while bowling";
+	}
+}
+
+function bowlstartdown(){
+	if(bowlingvariable==0){
+		if(bowlstart>0){
+			bowlstart--;
+		}
+		outputbowlstart();
+		document.getElementById("statusmessages").innerHTML="change bowling start position to the left!";
+	}
+	else{
+		document.getElementById("statusmessages").innerHTML="can not change start position of bowling while bowling";
+	}
+}
+//cards functions
+
+function initcardvalues(){
+	var index=0;
+	while(index<7){
+		cardsarray.push(0);
+		index++;
+	}
+	numshuffles=0;
+	numshifts=0;
+}
+
+function outputcards(){
+	var outputcards="";
+	var index=0;
+	while(index<7){
+		if(index!=0){
+			outputcards+=",";
+		}
+		if(cardsarray[index]==0){
+			outputcards+="0";
+		}
+		else if(cardsarray[index]==1){
+			outputcards+="+1";
+		}
+		else if(cardsarray[index]==2){
+			outputcards+="+2";
+		}
+		else if(cardsarray[index]==3){
+			outputcards+="+3";
+		}
+		else if(cardsarray[index]==4){
+			outputcards+="+4";
+		}
+		else if(cardsarray[index]==5){
+			outputcards+="+5";
+		}
+		else if(cardsarray[index]==6){
+			outputcards+="+6";
+		}
+		else if(cardsarray[index]==7){
+			outputcards+="RO";
+		}
+		else if(cardsarray[index]==8){
+			outputcards+="RO";
+		}
+		else if(cardsarray[index]==9){
+			outputcards+="-6";
+		}
+		else if(cardsarray[index]==10){
+			outputcards+="-5";
+		}
+		else if(cardsarray[index]==11){
+			outputcards+="-4";
+		}
+		else if(cardsarray[index]==12){
+			outputcards+="-3";
+		}
+		else if(cardsarray[index]==13){
+			outputcards+="-2";
+		}
+		else if(cardsarray[index]==14){
+			outputcards+="-1";
+		}
+		else if(cardsarray[index]==15){
+			outputcards+="0";
+		}
+		else if(cardsarray[index]==16){
+			outputcards+="GG";
+		}
+		index++;
+	}
+	document.getElementById("carddisplay").innerHTML=outputcards;//cardsarray;
+}
+
+function shufflecards(){
+	var index=0;
+	if(bowlingvariable==0){
+		shufflingvariable=1;
+		while(index<7){
+			cardsarray[index]=Math.floor((Math.random() * 17) + 0)
+			index++;
+		}
+		numshuffles++;
+		numshifts=0;
+		outputcards();
+		document.getElementById("statusmessages").innerHTML="shuffled cards!"
+	}
+	else{
+		document.getElementById("statusmessages").innerHTML="can not shuffle cards, bowling"
+	}
+}
+
+//shift functions
+
+function shift(){
+	var shift1=Number(document.getElementById("shift1").options[document.getElementById("shift1").selectedIndex].value);
+	var shift2=Number(document.getElementById("shift2").options[document.getElementById("shift2").selectedIndex].value);
+	var s1hold=0;
+	var s2hold=0;
+	if((bowlingvariable==0)&&(shufflingvariable!=0)){
+		if(shift1!=shift2){
+			s1hold=cardsarray[shift1];
+			s2hold=cardsarray[shift2];
+			cardsarray[shift1]=s2hold;
+			cardsarray[shift2]=s1hold;
+			numshifts++;
+			outputcards();
+			document.getElementById("statusmessages").innerHTML="shifted cards!"
+		}
+		else{
+				document.getElementById("statusmessages").innerHTML="did not shift cards, same cards selected"
+		}
+	}
+	else{
+			document.getElementById("statusmessages").innerHTML="did not shift cards, need to shuffle, or bowling"
+	}
+}
+
+//initial function calls
+
+initbowlarrays();
+initcardvalues();
+
+</script>
+<style>
+/*CSS*/
+</style>
+</head>
+<body>
+<h1>Spin Bowlers- Type 2</h1>
+<!--Bowling pin image space-->
+<div>
+</div>
+<!--Bowl slots-->
+<div>
+<button onclick="bowlplayrun()">Bowl</button><span id="bowlslotspace"></span>
+</div>
+<!-- bowl start -->
+<div>
+<button onclick="bowlstartup()">↑</button><b>:</b><span id="startdisplay"></span><b>:</b><button onclick="bowlstartdown()">↓</button><b>bowl start point</b>
+</div>
+<!--cards-->
+<div>
+<button onclick="shufflecards()">Shuffle</button><span id="carddisplay"></span>
+</div>
+<!--shifts-->
+<select title="shift1" id="shift1">
+  <option>0</option>
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+  <option>4</option>
+  <option>5</option>
+  <option>6</option>
+</select>
+<button onclick="shift()">Shift</button>
+<select title="shift2" id="shift2">
+  <option>0</option>
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+  <option>4</option>
+  <option>5</option>
+  <option>6</option>
+</select>
+<div>
+</div>
+<!-- messages-->
+<div>
+<b>RESULTS:</b><spam id="resultmessages"></span>
+</div>
+<div>
+<b>STATUS:</b><spam id="statusmessages"></span>
+</div>
+<p>
+<b>RO=rollout, GG=galagyro</b>
+</p>
+<script>
+<!-- initial functions-->
+outputbowlstart();
+</script>
+</body>
+</html> 
