@@ -65,6 +65,9 @@ function getbowlresults(){
 			if(((subvalue+bowlslot[index])<7)&&((subvalue+bowlslot[index])>=0)){
 				subvalue=subvalue+bowlslot[index];
 			}
+			else{
+				subvalue=0;
+			}
 			if(index==2|3|4){
 				subvalue=subvalue*2;
 			}
@@ -77,6 +80,9 @@ function getbowlresults(){
 			subvalue=cardsarray[index]-15;
 			if(((subvalue+bowlslot[index])<7)&&((subvalue+bowlslot[index])>=0)){
 				subvalue=subvalue+bowlslot[index];
+			}
+			else{
+				subvalue=0;
 			}
 			if(index==2|3|4){
 				subvalue=subvalue*2;
@@ -352,7 +358,7 @@ initcardvalues();
 </script>
 <style>
 /*CSS*/
-	
+
 body {background-color: gold;}
 
 </style>
