@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Deviantart Embedder</title>
+  <script>
+    function converter(){
+      
+  var x = document.getElementById("uinput").value;
+      document.getElementById("putcontent").innerHTML="https://www.tumblr.com/oembed?url="+encodeURIComponent(x); 
+    }
+  </script>
+  <style>
+  </style>
+</head>
+<body>
+  <label for="uinput">INPUT URL of DEVIANTART to embed</label> <input type="url" id="uinput"><button onclick="converter()">ENCODE!!!</button>
+  <div id="putcontent"></div>
+</body>
+</html> 
