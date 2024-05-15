@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="EN">
+	<head>
+		<title>Fractallens 01</title>
+		<meta charset="utf-8">
+		<meta name="description" content="Fractallens 01 by Houyhnhnm/Hddeviant/Richard Murray">
+		<meta name="keywords" content="HTML, Fractal, JavaScript">
+		<meta name="author" content="Richard Murray/Hddeviant/Houyhnhnm">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<link rel="stylesheet" href="mystyle.css">-->
+		<style>
+			body {
+				background-color: linen;
+			}
+			h1 {
+				color: maroon;
+				margin-left: 40px;
+			}
+		</style>
+<!--<script src="myScript.js"></script>-->
+		<script type="text/javascript">
+			const Maxvalue=1000;
+			const A1length=Maxvalue;
+			const A2length=Maxvalue;
+			let TempA1=0;
+			let TempA2=0;
+			let NextA1=0;
+			let NextA2=0;
+			let rfactor=.5;
+			let AChoose=0;//axis choose
+			let AChooseold=-1;
+			let setvalue1=0;
+			let setvalue2=0;
+			let setvalue3=0;
+			function achooser(){
+				AChoose=Math.floor(Math.random() * 4);
+			}
+			function setrestrict(){
+				setvalue1= Number(document.getElementById("restrictions1").selectedIndex);
+				setvalue2= Number(document.getElementById("restrictions2").selectedIndex);
+				setvalue3= Number(document.getElementById("restrictions3").selectedIndex);
+			}
+			function returnset(input){
+				let returnval=0;
+				if(input==1){
+					returnval=setvalue1;
+				}
+				else if (input==2){
+					returnval=setvalue2;
+				}
+				else if(input==3){
+					returnval=setvalue3;
+				}
+				else{}
+				return returnval;
+			}
+			function achooseolder(){
+				return AChoose!=AChooseold;
+			}
+			function setachooseolder(){
+				AChooseold=AChoose;
+			}
+			function chaosloop(){
+				setrestrict();
+				rfactor=Number(document.getElementById("rgbq7").value);
+				let counter=0;
+				let canvas = document.getElementById("myCanvas");
+				let ctx = canvas.getContext("2d");
+				let imgData = ctx.getImageData(0,0,Maxvalue, Maxvalue);
+				while(counter<10000){
+					achooser();
+					if((AChoose==0)&&((returnset(1)==0)||((returnset(1)==1)&&achooseolder()))&&((returnset(2)==0)||(returnset(2)!=1))&&((returnset(3)==0)||((returnset(3)==1)&&(counter%2==0))||((returnset(3)==2)&&(counter%2==1)))){
+						NextA1=Math.floor(Math.abs((TempA1-0)*rfactor));
+						NextA2=Math.floor(Math.abs((TempA2-0)*rfactor));
+						if(returnset(1)==1){setachooseolder()} else{};
+					}
+					else if((AChoose==1)&&((returnset(1)==0)||((returnset(1)==1)&&achooseolder()))&&((returnset(2)==0)||(returnset(2)!=2))&&((returnset(3)==0)||((returnset(3)==1)&&(counter%2==0))||((returnset(3)==2)&&(counter%2==1)))){
+						NextA1=TempA1+Math.floor((Math.abs(TempA1-A1length)*rfactor));
+						NextA2=Math.floor(Math.abs((TempA2-0)*rfactor));
+						if(returnset(1)==1){setachooseolder()} else{};
+					}
+					else if((AChoose==2)&&((returnset(1)==0)||((returnset(1)==1)&&achooseolder()))&&((returnset(2)==0)||(returnset(2)!=3))&&((returnset(3)==0)||((returnset(3)==1)&&(counter%2==0))||((returnset(3)==2)&&(counter%2==1)))){
+						NextA1=TempA1+Math.floor((Math.abs(TempA1-A1length)*rfactor));
+						NextA2=TempA2+Math.floor((Math.abs(TempA2-A2length)*rfactor));
+						if(returnset(1)==1){setachooseolder()} else{};
+					}
+					else if((AChoose==3)&&((returnset(1)==0)||((returnset(1)==1)&&achooseolder()))&&((returnset(2)==0)||(returnset(2)!=4))&&((returnset(3)==0)||((returnset(3)==1)&&(counter%2==0))||((returnset(3)==2)&&(counter%2==1)))){
+						NextA1=Math.floor(Math.abs((TempA1-0)*rfactor));
+						NextA2=TempA2+Math.floor((Math.abs(TempA2-A2length)*rfactor));
+						if(returnset(1)==1){setachooseolder()} else{};
+					}
+					else{
+					}
+					canvas = document.getElementById("myCanvas");
+					ctx = canvas.getContext("2d");
+					imgData = ctx.getImageData(0,0,Maxvalue, Maxvalue);
+					imgData.data[((NextA1+(NextA2*Maxvalue))*4)+0] = Number(document.getElementById("rgbq4").value);
+					imgData.data[((NextA1+(NextA2*Maxvalue))*4)+1] = Number(document.getElementById("rgbq5").value);
+					imgData.data[((NextA1+(NextA2*Maxvalue))*4)+2] = Number(document.getElementById("rgbq6").value);
+					imgData.data[((NextA1+(NextA2*Maxvalue))*4)+3] = 255;
+					ctx.putImageData(imgData, 0, 0);
+					TempA1=NextA1;
+					TempA2=NextA2;
+					counter++;
+				}
+			}
+			function randompoint(){
+				let returnval=true
+				TempA1=Math.floor(Math.random() * Maxvalue);
+				TempA2=Math.floor(Math.random() * Maxvalue);
+				return returnval;
+			}
+			function initbox(step2,step3) {
+				let returnval=true
+				let canvas = document.getElementById("myCanvas");
+				let ctx = canvas.getContext("2d");
+				let imgData = ctx.getImageData(0,0,Maxvalue, Maxvalue);
+				for (let i = 0; i < imgData.data.length; i += 4)
+				{
+					imgData.data[i+0] = Number(document.getElementById("rgbq1").value);
+					imgData.data[i+1] = Number(document.getElementById("rgbq2").value);
+					imgData.data[i+2] = Number(document.getElementById("rgbq3").value);
+					imgData.data[i+3] = 255;
+				}
+				ctx.putImageData(imgData, 0,0);
+				step2();
+				step3();
+				return returnval;
+			}
+		</script>
+	</head>
+	<body >
+		<h1>FractalLens 01 from <a href="https://aalbc.com/tc/clubs/5-blackgameselite/" target="blank">Black Games Elite</a></h1>
+		<p>background color</p>
+		<p>R <input type="number" id="rgbq1" name="quantity" min="0" max="255" step="1"  value="0">G <input type="number" id="rgbq2" name="quantity" min="0" max="255" step="1" value="0"> B<input type="number" id="rgbq3" name="quantity" min="0" max="255" step="1" value="0"></p>
+		<p>element color</p>
+		<p>R <input type="number" id="rgbq4" name="quantity" min="0" max="255" step="1" value="255">G <input type="number" id="rgbq5" name="quantity" min="0" max="255" step="1" value="255"> B<input type="number" id="rgbq6" name="quantity" min="0" max="255" step="1" value="255"></p>
+		<p>factor</p>
+		<p><input type="number" id="rgbq7" name="quantity" min="0" max="2" step=".1" value=".5"></p>
+		<p>Restrictions repetition<select name="restrictions1" id="restrictions1">
+			<option value="r11" selected>None</option>
+			<option value="r12">Not as before</option>
+			</select>
+			Restrictions axis<select name="restrictions2" id="restrictions2">
+			<option value="r21" selected>None</option>
+			<option value="r22">Not top left</option>
+			<option value="r23">Not top right</option>
+			<option value="r24">Not bottom right</option>
+			<option value="r25">Not bottom left</option>
+			</select>
+			Restrictions coin toss<select name="restrictions3" id="restrictions3">
+			<option value="r31" selected>None</option>
+			<option value="r32">Even iteration</option>
+			<option value="r33">Odd iteration</option>
+			</select>
+		</p>
+		<p>Functional result-unused for now<input type="text" id="finput"></p><!-- i set to the same value as 0 but it requires a function check if counter is a result of a given function -->
+		<p><button type="button" onclick="initbox(randompoint,chaosloop)">Open FractalLens!</button></p>
+		<canvas id="myCanvas" width="500px" height="500px" ></canvas>
+	</body>
+</html>
