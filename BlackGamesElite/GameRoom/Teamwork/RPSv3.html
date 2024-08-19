@@ -211,6 +211,12 @@ function endgame(){
 	clearInterval(secondinterval);
 }
 
+function copyclipboard() {
+  // Copy the text inside the text field
+  navigator.clipboard.writeText("<iframe height=\"300\" src=\"http://houyhnhnm.github.io/BlackGamesElite/GameRoom/Teamwork/RPSv3.html\" style=\"border:1px solid black;\" title=\"RPS  - rock PAper Scissors project , inspired by Angelalita77 \" width=\"100%\"></iframe>");
+	alert("copied embed to clipboard");
+}
+	
 </script>
 </head>
 <body>
@@ -218,6 +224,7 @@ function endgame(){
 	<h3>Rock Paper Scissors game by Houyhnhnm inspired by Angelalita77</h3>
 <button type="button" onclick="startgame()">START</button> 
 <button type="button" onclick="endgame()">STOP</button>
+	<button type="button" onclick="copyclipboard()">SHARE</button>
 <p id="rpstrack">EYE</p>
 <p> WINS <b id="wincount"></b> % <b id="percentwin"></b> TIME <b id="totaltime"></b></p>
 <button type="button" onclick="setrock()"> R </button>
