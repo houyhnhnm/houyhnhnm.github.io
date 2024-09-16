@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>DogoKwan of the HDKiriban series</title>
+<meta charset="UTF-8">
+<meta name="description" content="DogoKwan is a slide tile puzzle game ; HDKiriban is a series of games designed to honor followers with different things they can do with their work">
+<meta name="keywords" content="HTML, CSS, JavaScript, Hddeviant, Houyhnhnm">
+<meta name="author" content="Houyhnhnm/ Hddeviant , Richard Murray">
+<style>
+#imageplace{
+	background-color:black;color:white;
+	display:none
+}
+#imageframe{
+	display:none
+}
+#canvasload{
+	display:none
+}
+#canvasdock{
+	display:none
+}
+#blackspace{
+	display:none
+}
+</style>
+<script>
+
+var storageinfo;
+var storageurl1;
+var storagetitle;
+var storageauthor;
+var storageauthorurl;
+var storagewidth1;
+var storageheight1;
+var storageurl2;
+var storagewidth2;
+var storageheight2;
+var movescount=0;
+var secondtotal=0;
+var minutetotal=0;
+var hourtotal=0;
+var tilemove=0;
+var tilearray=[];
+var subwidth=0;
+var subheight=0;
+var tilex=0;
+var tiley=0;
+var timerobject;
+var gamestate=1;
+function loadembed(loadvar){
+	if(loadvar.length>0){
+		document.getElementById("embedarea").value= "<iframe height=\"300\" src=\"http://houyhnhnm.github.io/BlackGamesElite/GameRoom/hdkiriban/DogokwanHDKv04.html?dhdku="+loadvar+"\" style=\"border:1px solid black;\" title=\"DogoKwan of the HDKiriban series\" width=\"100%\"></iframe>"
+	}
+	else{
+		document.getElementById("embedarea").value= "<iframe height=\"300\" src=\"http://houyhnhnm.github.io/BlackGamesElite/GameRoom/hdkiriban/DogokwanHDKv04.html\" style=\"border:1px solid black;\" title=\"DogoKwan of the HDKiriban series\" width=\"100%\"></iframe>"
+	}
+	
+}
+
+function endgame(){
+	gamestate=1;
+	clearInterval(timerobject);
+	alert("YOU WON");
+}
+
+
+function displaymoves(){
+	document.getElementById("movenumber").innerHTML=movescount;
+}
+
+function displaytiles(){
+	let canvasload = document.getElementById("canvasload");
+	let canvasblack = document.getElementById("blackspace");
+	let canvasgame = document.getElementById("canvasview");
+	let ctx1=canvasgame.getContext("2d");
+	var index1=0;
+	var index2=0;
+	var subvalue1=0;
+	var subvalue2=Number(document.getElementById("dimensions").value);
+	while(index1<subvalue2){
+		index2=0;
+		while(index2<subvalue2){
+			var subvalue1=tilearray[(index1*subvalue2)+index2];
+			if(subvalue1==((Math.pow(Number(document.getElementById("dimensions").value),2))-1)){
+			ctx1.drawImage(canvasblack,
+				Math.floor(subvalue1%subvalue2)*subwidth, 
+				Math.floor(subvalue1/subvalue2)*subheight, 
+				subwidth,
+				subheight,
+				Math.floor(index2*subwidth),//(subvalue2-1)-index2)
+				Math.floor(index1*subheight),
+				subwidth,
+				subheight 
+			)
+			}
+			else{
+			ctx1.drawImage(canvasload,
+				Math.floor(subvalue1%subvalue2)*subwidth, 
+				Math.floor(subvalue1/subvalue2)*subheight, 
+				subwidth,
+				subheight,
+				Math.floor(index2*subwidth),//(subvalue2-1)-index2)
+				Math.floor(index1*subheight),
+				subwidth,
+				subheight
+			)
+			}
+			index2++;
+		}
+		index1++;
+	}
+	var endcheck=0;
+	var endindex=0;
+	while((endcheck==0)&&(endindex<Math.pow(Number(document.getElementById("dimensions").value),2))){
+		if(tilearray[endindex]!=endindex){
+			endcheck=1;
+		}
+		endindex++;
+	}
+	if((gamestate==0)&&(endcheck==0)){
+		endgame();
+	}
+	else{
+	}
+}
+
+function buttonleft(){
+	tilemove=0;
+	var subvalue1=0;
+	var subvalue2=0;
+	if(tiley!=0){
+		movescount++;
+		subvalue1=tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley];
+		subvalue2=tilearray[(tilex*Number(document.getElementById("dimensions").value))+(tiley-1)];
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+(tiley-1)]=subvalue1;
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley]=subvalue2;
+		tiley--;
+		displaytiles();
+		displaymoves();
+	}else{
+	}
+}
+
+function buttonright(){
+	tilemove=1;
+	var subvalue1=0;
+	var subvalue2=0;
+	if(tiley!=(Number(document.getElementById("dimensions").value)-1)){
+		movescount++;
+		subvalue1=tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley];
+		subvalue2=tilearray[(tilex*Number(document.getElementById("dimensions").value))+(tiley+1)];
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+(tiley+1)]=subvalue1;
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley]=subvalue2;
+		tiley++;
+		displaytiles();
+		displaymoves();
+	}else{
+	}
+}
+
+function buttonup(){
+	tilemove=2;
+	var subvalue1=0;
+	var subvalue2=0;
+	if(tilex!=0){
+		movescount++;
+		subvalue1=tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley];
+		subvalue2=tilearray[((tilex-1)*Number(document.getElementById("dimensions").value))+tiley];
+		tilearray[((tilex-1)*Number(document.getElementById("dimensions").value))+tiley]=subvalue1;
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley]=subvalue2;
+		tilex--;
+		displaytiles();
+		displaymoves();
+	}else{
+	}
+}
+
+function buttondown(){
+	tilemove=3;
+	var subvalue1=0;
+	var subvalue2=0;
+	if(tilex!=(Number(document.getElementById("dimensions").value)-1)){
+		movescount++;
+		subvalue1=tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley];
+		subvalue2=tilearray[((tilex+1)*Number(document.getElementById("dimensions").value))+tiley];
+		tilearray[((tilex+1)*Number(document.getElementById("dimensions").value))+tiley]=subvalue1;
+		tilearray[(tilex*Number(document.getElementById("dimensions").value))+tiley]=subvalue2;
+		tilex++;
+		displaytiles();
+		displaymoves();
+	}else{
+	}
+}
+
+
+function incrementer(){
+	secondtotal++;
+	if(secondtotal==60){
+		secondtotal=0;
+		minutetotal++;
+		if(minutetotal==60){
+			minutetotal=0;
+			hourtotal++;
+			if(hourtotal==24){
+				alert("a day has passed");
+			}
+			else{
+			}
+		}
+		else{
+		}
+	}
+	else{
+	}
+	document.getElementById("clocker").innerHTML="Seconds:"+secondtotal+"Minutes:"+minutetotal+"Hours"+hourtotal;
+}
+
+function startgame(){
+	movescount=0;
+	secondtotal=0;
+	minutetotal=0;
+	hourtotal=0;
+	gamestate=0;
+	displaytiles();
+	timerobject= setInterval(incrementer, 1000);
+}
+
+function randomtiles(){
+	var randomcount=0;
+	var randomval=0;
+	while(randomcount<Number(document.getElementById("difficulty").value)){
+		randomval=Math.floor(Math.random() * 4);
+		if(randomval==0){
+			buttonup();
+		}
+		else if(randomval==1){
+			buttondown();
+		}
+		else if(randomval==2){
+			buttonleft();
+		}
+		else if(randomval==3){
+			buttonright();
+		}
+		else{}
+		randomcount++;
+	}
+	movescount=0;
+	displaymoves();
+}
+
+function settiles(){
+	tilearray = new Array(Math.pow(Number(document.getElementById("dimensions").value),2));
+	subwidth=storagewidth2/Number(document.getElementById("dimensions").value);
+	subheight=storageheight2/Number(document.getElementById("dimensions").value);
+	document.getElementById("canvasview").width=subwidth*Number(document.getElementById("dimensions").value);
+	document.getElementById("canvasview").height=subheight*Number(document.getElementById("dimensions").value);
+	tilex=Number(document.getElementById("dimensions").value)-1;
+	tiley=Number(document.getElementById("dimensions").value)-1;
+	let canvasoriginal = document.getElementById("canvasload");//original image
+	let canvasview= document.getElementById("canvasview");//game space
+	var index1=0;
+	var index2=0;
+	while(index1<Number(document.getElementById("dimensions").value)){
+		index2=0;
+		while(index2<Number(document.getElementById("dimensions").value)){
+			tilearray[(index1*Number(document.getElementById("dimensions").value))+index2]=(index1*Number(document.getElementById("dimensions").value))+index2;
+			index2++;
+		}
+		index1++;
+	}
+	gamestate=1;
+	randomtiles();
+	startgame();
+}
+
+function setcanvas(){
+	document.getElementById("canvasload").width=Number(storagewidth2);
+	document.getElementById("canvasload").height=Number(storageheight2);
+	document.getElementById("canvasload").src=storageurl2;
+	document.getElementById("canvasload").onload =  function(){ settiles();};
+}
+
+function getimageelements(urlcontent){
+	gamestate=1;
+	clearInterval(timerobject);
+	document.getElementById("imageframe").innerHTML=JSON.stringify(urlcontent);
+	var content1=JSON.stringify(urlcontent);
+	storageurl1=content1.match(/url":"([^"])*/i)[0].slice(6);
+	storagetitle=content1.match(/title":"([^"])*/i)[0].slice(8);
+	storageauthor=content1.match(/author_name":"([^"])*/i)[0].slice(14);
+	storageauthorurl=content1.match(/author_url":"([^"])*/i)[0].slice(13);
+	storagewidth1=content1.match(/width[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	storageheight1=content1.match(/height[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	storageurl2=content1.match(/thumbnail_url":"([^"])*/i)[0].slice(16);
+	storagewidth2=content1.match(/thumbnail_width[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	storageheight2=content1.match(/thumbnail_height[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	document.getElementById("imageplace").innerHTML="URL= "+storageurl1+" | <br>TITLE="+storagetitle+" | <br>AUTHOR="+storageauthor+" | <br>AUTHORURL="+storageauthorurl+" | <br>WIDTH="+storagewidth1+" | <br>HEIGHT="+storageheight1+" | <br>URL2="+storageurl2+" | <br>WIDTH2="+storagewidth2+" | <br>HEIGHT2="+storageheight2+" | <br>END";
+	setcanvas();
+}
+
+function getimage(){
+	loadembed(document.getElementById("urlplace").value);
+	storageinfo = document.createElement("script");
+	storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(document.getElementById("urlplace").value)+"&callback=getimageelements";
+document.body.appendChild(storageinfo);
+}
+
+function getimage2(urlinurl){
+	loadembed(urlinurl);
+	storageinfo = document.createElement("script");
+	storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(urlinurl)+"&callback=getimageelements";
+	document.body.appendChild(storageinfo);
+}
+
+function getimage3(){
+	loadembed(document.getElementById("watchers").value);
+	if(String(document.getElementById("watchers").value).length>0){
+		storageinfo = document.createElement("script");
+		try{
+			storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(document.getElementById("watchers").value)+"&callback=getimageelements";
+			document.body.appendChild(storageinfo);
+			document.getElementById("errormessage").innerHTML="";
+		}
+		catch(e){
+			document.getElementById("errormessage").innerHTML=e.message;
+		}
+	}
+	else{
+		document.getElementById("errormessage").innerHTML="no url for user , they are private";
+	}
+}
+
+function getstart(){
+let tempurl1=window.location.search;
+if(tempurl1.length>0){
+	if(tempurl1.match(/dhdku=([^&])*/i)!=null){
+			let tempurl2= tempurl1.match(/dhdku=([^&])*/i)[0].slice(6);
+			document.getElementById("imageplace").innerHTML=tempurl2;
+			getimage2(tempurl2);
+	}
+	else{//do nothing
+	}
+}
+else{//do nothing
+}
+}
+</script>
+</head>
+<body onload="getstart()">
+	<div>
+		<a href="https://aalbc.com/tc/blogs/blog/63-bge-arcade/" target="_blank"> BLACK GAMES ELITE </a> <span>of</span><a href="https://aalbc.com/tc/" target="_blank">AALBC</a>
+		<h3>DogoKwan of the HDKiriban series</h3>
+		<h4>first 25 watchers are listed in the link, but any deviantart member can place their url</h4>
+	</div>
+	<div>
+		<form>
+			<label for="urlplace">URL:</label>
+			<input type="text" id="urlplace" name="urlplace">
+			<button type="button" onclick="getimage()">Play Image from URL</button>
+		</form>
+		<label for="watchers">Choose one of my first 25 watchers, any with an @ sight I was uanble to get for stated reason after and i place an image of my own:</label>
+		<select name="watchers" id="watchers">
+			<option value="https://www.deviantart.com/xadrea/art/Nathalie-306755833">xadrea</option>
+			<option value="https://www.deviantart.com/hddeviant/art/CalligraphyMirror-KissOfADagger-805595314">remedy13@private</option>
+			<option value="https://www.deviantart.com/guillyboo/art/Red-Poppy-Witch-794533484">guillyboo</option>
+			<option value="https://www.deviantart.com/butch007/art/YellowVeil-02-594935565">butch007</option>
+			<option value="https://www.deviantart.com/oradiancporciuncula/art/Horizonte-de-Iemanja-338419034">oradiancporciuncula</option>
+			<option value="https://www.deviantart.com/mainasha/art/More-big-booty-jane-503317801">mainasha</option>
+			<option value="https://www.deviantart.com/berriesare/art/SIMPLY-THE-8EST-THERE-IS-511724726">berriesare</option>
+			<option value="https://www.deviantart.com/chrizdamegakilla/art/master-chief-2-82267616">chrizdamegakilla</option>
+			<option value="https://www.deviantart.com/instinct101/art/Justine-s-Enchantix-494512465">instinct101</option>
+			<option value="https://www.deviantart.com/j5rson/art/lightwell-308125746">j5rson</option>
+			<option value="https://www.deviantart.com/flapperfoxy/art/Katnip-Kollege-1080898348">flapperfoxy</option>
+			<option value="https://www.deviantart.com/chibipie-kagane/art/Friendship-Bad-Ending-A-House-for-Alesa-Fanart-1096174712">chibipie-kagane</option>
+			<option value="https://www.deviantart.com/dracodawnstar/art/Snow-Queen-Child-Color-942294749">dracodawnstar</option>
+			<option value="https://www.deviantart.com/lirbalam/art/Autumn-waitings-859874463">lirbalam</option>
+			<option value="https://www.deviantart.com/mrpickle133/art/Lion-DoodleArt-888991040">mrpickle133</option>
+			<option value="https://www.deviantart.com/atomickawaii/art/Yume-Dream-Sheep-Original-Art-1038612052">atomickawaii</option>
+			<option value="https://www.deviantart.com/frans-flygare/art/Mermay-3-light-Lava-841939829">frans-flygare</option>
+			<option value="https://www.deviantart.com/kmd-artisan/art/Starry-Robot-Kitty-881029026">kmd-artisan</option>
+			<option value="https://www.deviantart.com/seaslugstudios/art/OC-Meme-Challenge-Akai-Edition-887209079">seaslugstudios</option>
+			<option value="https://www.deviantart.com/rollikins/art/Kitten-Suesai-Commission-2024-1030514707">rollikins</option>
+			<option value="https://www.deviantart.com/hddeviant/art/Margot-and-Eliot-Monogram-770738822">tanahgrogot@deactivated</option>
+			<option value="https://www.deviantart.com/hddeviant/art/Chocolate-Beauties-Cheerleader-Contest-2014-entry-454411881">lildeemon@no post</option>
+			<option value="https://www.deviantart.com/savageoofchicken896/art/Jack-Devil-in-Gacha-Club-947909632">savageoofchicken896</option>
+			<option value="https://www.deviantart.com/dafriendiswelcome/art/Noise-piercing-of-lady-of-fortune-909631459">dafriendiswelcome</option>
+			<option value="https://www.deviantart.com/kphillips702/art/Priestess-of-Isis-461570546">kphillips702</option>
+		</select>
+		<button type="button" onclick="getimage3()">Play Image from Watcherlist</button><br>
+		<label for="dimensions">Choose one of the dimension settings:</label>
+		<select name="dimensions" id="dimensions">
+			<option value="3">3x3</option>
+			<option value="4">4x4</option>
+			<option value="5">5x5</option>
+			<option value="6">6x6</option>
+			<option value="7">7x7</option>
+		</select>
+		<label for="difficulty">Choose one of the difficulty settings:</label>
+		<select name="difficulty" id="difficulty">
+			<option value="5">01</option>
+			<option value="10">02</option>
+			<option value="15">03</option>
+			<option value="20">04</option>
+			<option value="25">05</option>
+			<option value="30">06</option>
+			<option value="35">07</option>
+			<option value="40">08</option>
+			<option value="45">09</option>
+			<option value="50">10</option>
+			<option value="55">11</option>
+			<option value="60">12</option>
+			<option value="65">13</option>
+			<option value="70">14</option>
+			<option value="75">15</option>
+			<option value="80">16</option>
+			<option value="85">17</option>
+			<option value="90">18</option>
+			<option value="95">19</option>
+			<option value="100">20</option>
+		</select>
+		<span></span>
+		<div id="imageplace"></div>
+		<span></span>
+		<div id="imageframe"></div>
+	</div>
+	<div>
+		<img id="blackspace" src="blackspace.png" width="777" height="554"></img>
+		<img id="canvasload"></img><br>
+		<canvas id="canvasdock"></canvas><br>
+		<canvas id="canvasview"></canvas><br>
+		<button type="button" onclick="buttonup()">↑</button>
+		<button type="button" onclick="buttondown()">↓</button>
+		<button type="button" onclick="buttonleft()">←</button>
+		<button type="button" onclick="buttonright()">→</button>
+		<span> MOVES#:</span><span id="movenumber"></span>
+		<span>TIME:</span><span id="clocker"></span>
+	</div>
+		<span>EMBED CODE</span><br>
+		<textarea id="embedarea" rows="4" cols="4" readonly></textarea>
+	<div>
+		<p id="errormessage"></p>
+	</div>
+</body>
+</html>
