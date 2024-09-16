@@ -297,6 +297,7 @@ function getimageelements(urlcontent){
 	storageurl2=content1.match(/thumbnail_url":"([^"])*/i)[0].slice(16);
 	storagewidth2=content1.match(/thumbnail_width[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
 	storageheight2=content1.match(/thumbnail_height[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	document.getElementById("useranchor1").href=storageauthorurl;
 	document.getElementById("imageplace").innerHTML="URL= "+storageurl1+" | <br>TITLE="+storagetitle+" | <br>AUTHOR="+storageauthor+" | <br>AUTHORURL="+storageauthorurl+" | <br>WIDTH="+storagewidth1+" | <br>HEIGHT="+storageheight1+" | <br>URL2="+storageurl2+" | <br>WIDTH2="+storagewidth2+" | <br>HEIGHT2="+storageheight2+" | <br>END";
 	setcanvas();
 }
@@ -438,6 +439,8 @@ else{//do nothing
 		<span> MOVES#:</span><span id="movenumber"></span>
 		<span>TIME:</span><span id="clocker"></span>
 	</div>
+		<span>USER SELECT LINK</span><br>
+		<a href="https://www.deviantart.com/hddeviant" target="_blank" id="useramchor1">GO TO THEIR DEVIANTART</a>
 		<span>EMBED CODE</span><br>
 		<textarea id="embedarea" rows="4" cols="4" readonly></textarea>
 	<div>
