@@ -49,6 +49,11 @@ var tilex=0;
 var tiley=0;
 var timerobject;
 var gamestate=1;
+
+function alphatime(){
+	const d = new Date();
+	document.getElementById("timeclicked").innerHTML = d;
+}
 function loadembed(loadvar){
 	if(loadvar.length>0){
 		document.getElementById("embedarea").value= "<iframe height=\"300\" src=\"http://houyhnhnm.github.io/BlackGamesElite/GameRoom/hdkiriban/DogokwanHDKv04.html?dhdku="+loadvar+"\" style=\"border:1px solid black;\" title=\"DogoKwan of the HDKiriban series\" width=\"100%\"></iframe>"
@@ -307,6 +312,7 @@ function getimage(){
 	storageinfo = document.createElement("script");
 	storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(document.getElementById("urlplace").value)+"&callback=getimageelements";
 document.body.appendChild(storageinfo);
+	alphatime();
 }
 
 function getimage2(urlinurl){
@@ -314,6 +320,7 @@ function getimage2(urlinurl){
 	storageinfo = document.createElement("script");
 	storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(urlinurl)+"&callback=getimageelements";
 	document.body.appendChild(storageinfo);
+	alphatime();
 }
 
 function getimage3(){
@@ -332,6 +339,7 @@ function getimage3(){
 	else{
 		document.getElementById("errormessage").innerHTML="no url for user , they are private";
 	}
+	alphatime();
 }
 
 function getstart(){
@@ -438,6 +446,7 @@ else{//do nothing
 		<button type="button" onclick="buttonright()">→</button>
 		<span> MOVES#:</span><span id="movenumber"></span>
 		<span>TIME:</span><span id="clocker"></span>
+		<span id="timeclicked"></span>
 	</div>
 		<span>USER SELECT LINK</span><br>
 		<a href="https://www.deviantart.com/hddeviant" target="_blank" id="useranchor1">GO TO THEIR DEVIANTART</a>
