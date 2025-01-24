@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>BGEDOV- Black Games Elite Deviantart Oembed Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+<meta charset="UTF-8">
+<meta name="description" content="BGEDOV- Black Games Elite Deviantart Oembed Viewer ; BGEDOV is a tool to allow Deviantart Users to get Oembed content">
+<meta name="keywords" content="HTML, CSS, JavaScript, Hddeviant, Houyhnhnm, Sanawoɔ">
+<meta name="author" content="Houyhnhnm / HDdeviant , Richard Murray">
+<meta name="version" content="1">
+<style>
+</style>
+<script>
+/*variables*/
+var storageinfo;
+
+/*functions*/
+
+function getdeviationelements(urlcontent){
+	var content1=JSON.stringify(urlcontent);
+	document.getElementById("returndata").innerHTML+=content1;
+	var url1=content1.match(/thumbnail_url":"([^"])*/i)[0].slice(16);
+	var width1=content1.match(/thumbnail_width[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	var height1=content1.match(/thumbnail_height[^0-9]+([0-9])+/i)[0].match(/[0-9]+/i)[0];
+	document.getElementById("returndata").innerHTML+="<br><span>EMBEDED</span><br><a href=\""+document.getElementById("deviantarturl").value+"\" target=\"_blank\"><img src=\""+url1+"\" height=\""+height1+"\" width=\""+width1+"\"></img></a>";
+	var string1="<br><span>EMBED CODE</span><br><a href=\""+document.getElementById("deviantarturl").value+"\" target=\"_blank\"><img src=\""+url1+"\" height=\""+height1+"\" width=\""+width1+"\"></img></a>";
+	string1=string1.replaceAll("<", "&lt;");
+	string1=string1.replaceAll(">", "&gt;");	
+	document.getElementById("returndata").innerHTML+="<br><span>EMBED CODE</span><br><pre><code>"+string1+"</code></pre>";
+}
+
+function getombed(){
+	document.getElementById("returndata").innerHTML="";
+	storageinfo = document.createElement("script");
+	storageinfo.src = "https://backend.deviantart.com/oembed?format=jsonp&url="+encodeURIComponent(document.getElementById("deviantarturl").value)+"&callback=getdeviationelements";
+document.getElementById("returndata").innerHTML+="<span>JSON</span><br><a href=\""+"https://backend.deviantart.com/oembed?format=json&url="+encodeURIComponent(document.getElementById("deviantarturl").value)+"\" target=\"_blank\">"+"https://backend.deviantart.com/oembed?format=json&url="+encodeURIComponent(document.getElementById("deviantarturl").value)+"</a><br>";
+document.getElementById("returndata").innerHTML+="<span>XML</span><br><a href=\""+"https://backend.deviantart.com/oembed?format=xml&url="+encodeURIComponent(document.getElementById("deviantarturl").value)+"\" target=\"_blank\">"+"https://backend.deviantart.com/oembed?format=xml&url="+encodeURIComponent(document.getElementById("deviantarturl").value)+"</a><br><span>JSONP</span><br>";
+document.body.appendChild(storageinfo);
+}
+</script>
+</head>
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSRKS7K92T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LSRKS7K92T');
+</script>
+<body onload="">
+	<div>
+		<a href="https://aalbc.com/tc/blogs/blog/63-bge-arcade/" target="_blank"> BLACK GAMES ELITE </a> <span>of</span><a href="https://aalbc.com/tc/" target="_blank">AALBC</a>
+		<h3>BGEDOV- Black Games Elite Deviantart Oembed Viewer</h3>
+	</div>
+	<form>
+		<label for="deviantarturl">Deviantart Deviation URL:</label>
+		<input type="text" id="deviantarturl" name="deviantarturl">
+		<button type="button" onclick="getombed()">Get Oembed Content for Deviation</button>
+	</form>
+	<div id="returndata">
+	</div>
+	<div>
+		<p id="errormessage"></p>
+	</div>
+</body>
+</html>
