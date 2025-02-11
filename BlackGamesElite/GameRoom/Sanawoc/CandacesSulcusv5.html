@@ -1,0 +1,652 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Candace's Sulcus of the Sanawoc series</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+<meta charset="UTF-8">
+<meta name="description" content="Candace's Sulcus is a timing maze game ; Sanawoc is a series of games based on art">
+<meta name="keywords" content="HTML, CSS, JavaScript, Hddeviant, Houyhnhnm, Sanawoc">
+<meta name="author" content="Houyhnhnm / HDdeviant , Richard Murray">
+<meta name="version" content="1">
+<style>
+	.ogreclass{
+		background-color: rgb(255,204,204);
+	}
+	.catapultclass{
+		background-color: rgb(230,0,0);
+	}
+	.fieldclass{
+		background-color: rgb(0,179,0);
+	}
+	.hakimclass{
+		background-color: rgb(165, 42, 42);
+	}
+</style>
+<script>
+/*variables*/
+
+var CSarray=[]; //Candace's Sulcus array
+var CSwidth =11;
+var CSheight=11;
+var CSlevel=1;
+var OgreInterval;
+var FieldInterval;
+var clockInterval;
+var CSplaycoin=false;
+var CSclockcount;
+var CandaceX;
+var CandaceY;
+var Candacecoin=false;
+var Candacestorage=0;
+var Candacevalue=0;
+/*functions*/
+function setuparray(){
+	var index1=0;
+	var index2=0;
+	while(CSarray.length>(CSwidth*CSheight)){
+		CSarray.pop();
+	}
+	while(CSarray.length<(CSwidth*CSheight)){
+		CSarray.push(-1);
+	}
+	CSarray[60]=6.0;
+	while(index2<CSheight){
+		while(index1<CSwidth){
+			if(
+				(index2==0)||
+				(index1==0)||
+				(index1==10)||
+				(index2==10)
+			){
+				CSarray[index1+(index2*CSheight)]=0.0;
+			}
+			else if(
+				((index1!=0)&&(index1!=10)&&(index2==1||index2==9))||
+				((index2!=0)&&(index2!=10)&&(index1==1||index1==9))
+			){
+				CSarray[index1+(index2*CSheight)]=2.0;
+			}
+			else if(
+				(index1!=5)||
+				(index2!=5)
+			){
+				CSarray[index1+(index2*CSheight)]=4.0;
+			}
+			else{
+			}
+			index1++;
+		}
+		index2++;
+		index1=0;
+	}
+}
+
+function Sulcustable(){
+	var index=0;
+	var indey=0;
+	while(indey<CSheight){
+		index=0;
+		while(index<CSheight){
+			if(Math.floor(CSarray[index+(indey*CSheight)])==0){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(255,204,204)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255,"+CSarray[index+(indey*CSheight)]+");\">O</span>";
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==1){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor= "rgb(255,204,204)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255, 1.0);\">O</span>"
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==2){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(230,0,0)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255,"+(CSarray[index+(indey*CSheight)]-2.0)+");\">C</span>";
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==3){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(230,0,0)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255, 1.0);\">C</span>"
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==4){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(0,179,0)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255,"+(CSarray[index+(indey*CSheight)]-4.0)+");\">F</span>";
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==5){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(0,179,0)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255, 1.0);\">F</span>"
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==6){
+				//Do nothing at Hakim space
+			}	
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==7){
+				//Do nothing at HAkim Space
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==8){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(128,0,128)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255,"+(CSarray[index+(indey*CSheight)]-8.0)+");\">C</span>";
+			}
+			else if(Math.floor(CSarray[index+(indey*CSheight)])==9){
+				document.getElementById("Sulcustable").rows[indey].cells[index].style.backgroundColor="rgb(128,0,128)";
+				document.getElementById("Sulcustable").rows[indey].cells[index].innerHTML="<span style=\"background-color:rgba(255, 255, 255, 1.0);\">C</span>"
+			}
+			else{
+			}
+			index++;
+		}
+		indey++;
+	}
+}
+
+function displayarray(){
+	//In Prior Versions A Testing
+}
+
+function Ogrecheck(){
+	var index1=0;
+	var index2=0;
+	var Ogretruth=false;
+	while((index2<CSheight)&&(Ogretruth==false)){
+		while((index1<CSwidth)&&(Ogretruth==false)){
+			if(Math.floor(CSarray[index1+(index2*CSheight)])==0){//it is an Ogre
+				Ogretruth=true;
+			}
+			index1++;
+		}
+		index2++;
+		index1=0;
+	}
+	if(Ogretruth==false){
+		CSplaycoin=false;
+		Candacecoin=false;
+		clearInterval(FieldInterval);
+		clearInterval(OgreInterval);
+		clearInterval(clockInterval);
+		document.getElementById("errormessage").value ="\n"+"<br> Ogre's are Frozen!"+document.getElementById("errormessage").value ;
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br>"+Math.floor(Math.random() * 10)+"Snow is falling"+document.getElementById("errormessage").value;
+	}
+}
+
+function Ogrecold(){
+	var index1=0;
+	var index2=0;
+	while(index2<CSheight){
+		while(index1<CSwidth){
+			if(Math.floor(CSarray[index1+(index2*CSheight)])==0){//it is an Ogre
+				CSarray[index1+(index2*CSheight)]+=(.10*(1/CSlevel));
+			}
+			index1++;
+		}
+		index2++;
+		index1=0;
+	}
+	displayarray();
+	Sulcustable();
+	Ogrecheck();
+}
+
+function Fieldcheck(){
+	var Fieldtruth=true;
+	if(Math.floor(CSarray[CandaceX+(CandaceY*CSheight)])==9){
+		Fieldtruth=false;
+	}
+	if(Fieldtruth==false){
+		CSplaycoin=false;
+		Candacecoin=false;
+		clearInterval(FieldInterval);
+		clearInterval(OgreInterval);
+		clearInterval(clockInterval);
+		document.getElementById("errormessage").value ="\n"+"<br> Candace is Frozen!"+document.getElementById("errormessage").value;
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Candace can move!"+document.getElementById("errormessage").value;
+	}
+}
+
+function Fieldcold(){
+	var index1=0;
+	var index2=0;
+	while(index2<CSheight){
+		while(index1<CSwidth){
+			if(
+			(Math.floor(CSarray[index1+(index2*CSheight)])==4)||
+			(Math.floor(CSarray[index1+(index2*CSheight)])==8)
+			){//it is a Field or Candace
+				if(
+				(Math.floor(Math.random() * 49)<7)&&
+				((Math.floor(CSarray[index1+(index2*CSheight)])!=5)||
+				(Math.floor(CSarray[index1+(index2*CSheight)])!=9))
+				){
+					CSarray[index1+(index2*CSheight)]+=(.01*CSlevel);
+				}
+			}
+			index1++;
+		}
+		index2++;
+		index1=0;
+	}
+	displayarray();	
+	Sulcustable();
+	Fieldcheck();
+	document.getElementById("errormessage").value ="\n"+"<br> Snow Falls!"+document.getElementById("errormessage").value;
+}
+
+function Candacestore(subx, suby){
+	Candacestorage=CSarray[subx+(suby*CSheight)]-4.0;
+}
+
+function Candaceadd(){
+	Candacevalue+=Candacestorage;
+}
+
+function Fieldreset(subx,suby){
+	CSarray[subx+(suby*CSheight)]=4.0;
+}
+
+function Candacemove(subx,suby){
+	CSarray[subx+(suby*CSheight)]=Candacevalue;
+}
+
+function Candacecheck(){
+	if(
+	Math.floor(CSarray[CandaceX+(CandaceY*CSheight)])!=9
+	){
+		Sulcustable();
+		document.getElementById("errormessage").value ="\n"+"<br> Candace can move!"+document.getElementById("errormessage").value;
+	}
+	else{
+		Sulcustable();
+		CSplaycoin=false;
+		Candacecoin=false;
+		clearInterval(FieldInterval);
+		clearInterval(OgreInterval);
+		clearInterval(clockInterval);
+		document.getElementById("errormessage").value ="\n"+"<br> Candace is Frozen!"+document.getElementById("errormessage").value;
+	}
+}
+
+function Catapultcheck(){
+	if(CandaceX==2){
+		
+		CSarray[(CandaceX-1)+(CandaceY*CSheight)]+=(CSarray[CandaceX+(CandaceY*CSheight)]-8.0);
+		CSarray[(CandaceX-2)+(CandaceY*CSheight)]+=(CSarray[(CandaceX-1)+(CandaceY*CSheight)]-2.0);
+		CSarray[CandaceX+(CandaceY*CSheight)]=8.0;
+		CSarray[(CandaceX-1)+(CandaceY*CSheight)]=2.0;
+	}
+	if(CandaceX==8){
+		CSarray[(CandaceX+1)+(CandaceY*CSheight)]+=(CSarray[CandaceX+(CandaceY*CSheight)]-8.0);
+		CSarray[(CandaceX+2)+(CandaceY*CSheight)]+=(CSarray[(CandaceX+1)+(CandaceY*CSheight)]-2.0);
+		CSarray[CandaceX+(CandaceY*CSheight)]=8.0;
+		CSarray[(CandaceX+1)+(CandaceY*CSheight)]=2.0;
+	}
+	if(CandaceY==2){
+		CSarray[CandaceX+((CandaceY-1)*CSheight)]+=(CSarray[CandaceX+(CandaceY*CSheight)]-8.0);
+		CSarray[CandaceX+((CandaceY-2)*CSheight)]+=(CSarray[CandaceX+((CandaceY-1)*CSheight)]-2.0);
+		CSarray[CandaceX+(CandaceY*CSheight)]=8.0;
+		CSarray[CandaceX+((CandaceY-1)*CSheight)]=2.0;
+	}
+	if(CandaceY==8){
+		CSarray[CandaceX+((CandaceY+1)*CSheight)]+=(CSarray[CandaceX+(CandaceY*CSheight)]-8.0);
+		CSarray[CandaceX+((CandaceY+2)*CSheight)]+=(CSarray[CandaceX+((CandaceY+1)*CSheight)]-2.0);
+		CSarray[CandaceX+(CandaceY*CSheight)]=8.0;
+		CSarray[CandaceX+((CandaceY+1)*CSheight)]=2.0;
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Candace isn't on edge!"+document.getElementById("errormessage").value;
+	}
+	Ogrecheck();
+}
+
+function up(){
+	if(
+	(CSplaycoin==true)&&
+	(Candacecoin==true)
+	){
+		if(
+		(CandaceY>2)&&
+		((CandaceX!=5)||(CandaceY!=6))
+		){
+			Candacestore(CandaceX,CandaceY-1);
+			Candaceadd();
+			Fieldreset(CandaceX,CandaceY);
+			CandaceY=CandaceY-1;
+			Candacemove(CandaceX,CandaceY);
+			Candacecheck();
+			Catapultcheck();
+			document.getElementById("errormessage").value ="\n"+"<br> Moved up"+document.getElementById("errormessage").value;
+		}
+		else{
+			document.getElementById("errormessage").value ="\n"+"<br> Can't Move up"+document.getElementById("errormessage").value;
+		}
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Not Playing"+document.getElementById("errormessage").value;
+	}
+}
+
+function down(){
+	if(
+	(CSplaycoin==true)&&
+	(Candacecoin==true)
+	){
+		if(
+		(CandaceY<8)&&
+		((CandaceX!=5)||(CandaceY!=4))
+		){
+			Candacestore(CandaceX,CandaceY+1);
+			Candaceadd();
+			Fieldreset(CandaceX,CandaceY);
+			CandaceY=CandaceY+1;
+			Candacemove(CandaceX,CandaceY);
+			Candacecheck();
+			Catapultcheck();
+			document.getElementById("errormessage").value ="\n"+"<br> Moved down"+document.getElementById("errormessage").value;
+		}
+		else{
+			document.getElementById("errormessage").value ="\n"+"<br> Can't Move down"+document.getElementById("errormessage").value;
+		}
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Not Playing"+document.getElementById("errormessage").value;
+	}
+}
+
+function left(){
+	if(
+	(CSplaycoin==true)&&
+	(Candacecoin==true)
+	){
+		if(
+		(CandaceX>2)&&
+		((CandaceX!=6)||(CandaceY!=5))
+		){
+			Candacestore(CandaceX-1,CandaceY);
+			Candaceadd();
+			Fieldreset(CandaceX,CandaceY);
+			CandaceX=CandaceX-1;
+			Candacemove(CandaceX,CandaceY);
+			Candacecheck();
+			Catapultcheck();
+			document.getElementById("errormessage").value ="\n"+"<br> Moved left"+document.getElementById("errormessage").value;
+		}
+		else{
+			document.getElementById("errormessage").value ="\n"+"<br> Can't Move left"+document.getElementById("errormessage").value;
+		}
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Not Playing"+document.getElementById("errormessage").value;
+	}
+}
+
+function right(){
+	if(
+	(CSplaycoin==true)&&
+	(Candacecoin==true)
+	){
+		if(
+		(CandaceX<8)&&
+		((CandaceX!=4)||(CandaceY!=5))
+		){
+			Candacestore(CandaceX+1,CandaceY);
+			Candaceadd();
+			Fieldreset(CandaceX,CandaceY);
+			CandaceX=CandaceX+1;
+			Candacemove(CandaceX,CandaceY);
+			Candacecheck();
+			Catapultcheck();
+			document.getElementById("errormessage").value ="\n"+"<br> Moved right"+document.getElementById("errormessage").value;
+		}
+		else{
+			document.getElementById("errormessage").value ="\n"+"<br> Can't Move right"+document.getElementById("errormessage").value;
+		}
+	}
+	else{
+		document.getElementById("errormessage").value ="\n"+"<br> Not Playing"+document.getElementById("errormessage").value;
+	}
+}
+
+function placeCandace(){
+	Candacevalue=8.0;
+	Candacestore(CandaceX,CandaceY);
+	Candaceadd();
+	Candacecoin=true;
+	CSarray[CandaceX+(CandaceY*CSheight)]=Candacevalue;
+}
+
+function setCandace(){
+	var index1=Math.floor(Math.random() * 8);
+	var index2=Math.floor(Math.random() * 8);
+	while(
+		(index1*index2==60)||
+		(index1<2)||
+		(index1>8)||
+		(index2<2)||
+		(index2>8)
+	){
+		index1=Math.floor(Math.random() * 8);
+		index2=Math.floor(Math.random() * 8);	
+	}
+	CandaceX=index1;
+	CandaceY=index2;
+	placeCandace();
+	document.getElementById("errormessage").value ="\n"+"<br> Candace is Ready"+document.getElementById("errormessage").value;
+}
+
+function CSclock(){
+	CSclockcount++;
+	document.getElementById("timermessage").innerHTML="Seconds: "+Math.floor(CSclockcount%60)+"Minutes: "+Math.floor((CSclockcount/60)%60)+"Hours: "+Math.floor((CSclockcount/3600)%24);
+	Candacecheck();
+}
+function playCS(){
+	if(CSplaycoin==false){
+		document.getElementById("Sulcustable").style.visibility="visible";
+		document.getElementById("errormessage").value ="";
+		CSplaycoin=true;
+		Candacecoin=false;
+		CSclockcount=0;
+		setuparray();
+		Ogrecold();
+		clockInterval=setInterval(CSclock,1000);
+		OgreInterval=setInterval(
+			Ogrecold
+			,(1000*(5*(Math.floor((CSlevel/5))+1)))
+		);
+		FieldInterval=setInterval(
+			Fieldcold
+			,(1000*(1/((CSlevel/5)+1)))
+		);
+		setCandace();
+	}
+}
+
+function endCS(){
+	CSplaycoin=false;
+	Candacecoin=false;
+	clearInterval(OgreInterval);
+	clearInterval(FieldInterval);
+	clearInterval(clockInterval);
+	document.getElementById("errormessage").value ="\n"+"<br> GAME FORCED TO STOP!"+document.getElementById("errormessage").value;
+}
+
+</script>
+</head>
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSRKS7K92T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LSRKS7K92T');
+</script>
+<body onload="">
+	<div>
+		<a href="https://aalbc.com/tc/blogs/blog/63-bge-arcade/" target="_blank"> BLACK GAMES ELITE </a> <span>of</span><a href="https://aalbc.com/tc/" target="_blank">AALBC</a>
+<div><span>Art Inspired : <a target="_blank" href="https://www.deviantart.com/hddeviant/art/The-Charm-from-Gersemi-daughter-of-Freya-1131712473">The Charm from Gersemi, daughter of Freya</a> : <a target="_blank" href="https://www.deviantart.com/hddeviant/art/Hakim-s-plea-1132502204">Hakim's plea</a> : <a href="https://www.deviantart.com/hddeviant/art/Hakim-s-Annulary-Protection-1137597181" target="_blank">Hakim's Annulary Protection</a> : <a href="https://www.deviantart.com/hddeviant/art/Snowapelt-1139999788" target="_blank">Offline version</a> </span>
+</div>
+		<h3>Candace's Sulcus of the Sanawoc series</h3>
+	</div>
+	<div>
+		<button type="button" onclick="playCS()">Mwanzo/Start Game</button>
+		<button type="button" onclick="endCS()">Mwisho/End Game</button>
+		<br>
+		<button type="button" onclick="left()">←</button>
+		<button type="button" onclick="right()">→</button>
+		<button type="button" onclick="up()">↑</button>
+		<button type="button" onclick="down()">↓</button>
+	</div>
+	<div>
+		<table id="Sulcustable" style="visibility: hidden">
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="hakimclass"><span>H</span></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="fieldclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="catapultclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+			<tr>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+				<td class="ogreclass"></td>
+			</tr>
+		</table>	
+	</div>
+	<div>
+		<p id="timermessage"></p>
+	</div>
+	<div>
+		<textarea id="errormessage" rows="10" cols="50" wrap="hard">
+		</textarea>
+	</div>
+</body>
+</html>
