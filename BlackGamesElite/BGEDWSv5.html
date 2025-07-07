@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>BGEDWS- Black Games Elite Deviantart Watching Search</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="text/html">
+<meta X-Content-Type-Options="nosniff">
+<meta charset="utf-8">
+<meta http-equiv="Content-Type">
+<meta name="description" content="BGEDWS- Black Games Elite Deviantart Watching Search; BGEDWS- is a tool that allows a search of Deviantart users HdDeviant is watching">
+<meta name="keywords" content="HTML, CSS, JavaScript, Hddeviant, Houyhnhnm, deviantart">
+<meta name="author" content="Houyhnhnm / HDdeviant , Richard Murray, Richardmurrayhumblr">
+<meta name="version" content="1">
+<style>
+</style>
+<script>
+<!--
+
+-->
+/*variables*/
+var storageinfo;
+var sortstr1="https://backend.deviantart.com/rss.xml?type=deviations&q=sort%3Atime+meta%3Aall+by%3A"
+/*place user name between */
+var sortstr2="&offset="; //this is how you can iterate 0= from beginning 10=from tenth 20= from twentieth
+var sortstr3=0; //convert to a string, but can change as a number first
+
+/*functions*/
+
+function getuser(){
+	var check=document.getElementById("watching").selectedIndex;
+	var returnvalue;
+	if(check!=-1){
+	returnvalue=document.getElementById("watching").options[document.getElementById("watching").selectedIndex].text;
+	}
+	else{
+		returnvalue=document.getElementById("watching").options[0].text;
+	}
+	return returnvalue;
+}
+
+function getrecent(){
+	document.getElementById("returndata1").innerHTML="";
+	document.getElementById("errormessage").innerHTML="";
+	const storeuser=getuser();
+	var indexer=0;
+	const rssUrl=sortstr1+storeuser+sortstr2+sortstr3.toString();
+	fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`)
+	.then(response => response.json())
+	.then(data => {
+			const container2 = document.getElementById('returndata1');
+			const article2 = document.createElement('div');
+			article2.innerHTML= `<h3><a href="https://www.deviantart.com/`+storeuser+`" target="_blank">@`+storeuser+`</a></h3> `;	
+			container2.appendChild(article2);
+		while((indexer<10)&&(indexer<data.items.length)){
+			const container = document.getElementById('returndata1');
+			const article = document.createElement('div');
+			article.innerHTML += `<h3><b>${data.items[indexer].title}</b></h3><h3><a href="${data.items[indexer].link}" target="_blank">${data.items[indexer].link}</a></h3><h3><b>${data.items[indexer].pubDate}</b></h3>`;
+			article.innerHTML += `<img src="${data.items[indexer].thumbnail}"> </img>`;
+			container.appendChild(article);
+			indexer++;
+		}
+	})
+	.catch(error => console.error('Error fetching RSS feed:', error));
+}
+
+function getdays(){
+	var check=document.getElementById("daylength").selectedIndex;
+	var returnvalue;
+	if(check!=-1){
+		returnvalue=document.getElementById("daylength").options[document.getElementById("daylength").selectedIndex].text;
+	}
+	else{
+		returnvalue=7;
+	}
+	return returnvalue;
+}
+
+function checktimeinbounds(dateofimage,days){
+	const d = new Date(dateofimage);
+	if(Date.now()-d.getTime()>(days*86400000)){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+function Allcheck(){
+	document.getElementById("returndata1").innerHTML="";
+	document.getElementById("errormessage").innerHTML="";
+	var indexer=0;
+	var days=Number(getdays()); //number of days to check
+	while(indexer<document.getElementById("watching").options.length){
+		const rssUrl=sortstr1+document.getElementById("watching").options[indexer].text+sortstr2+sortstr3.toString();
+		const nameval=document.getElementById("watching").options[indexer].text;
+		fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`)
+		.then(response => response.json())
+		.then(data => {
+			if(checktimeinbounds(data.items[0].pubDate,days)){
+				const container = document.getElementById('returndata1');
+				const article = document.createElement('div');
+				article.innerHTML = `<h3><a href="https://www.deviantart.com/`+nameval+`" target="_blank">@`+nameval+`</a></h3> `;	
+				article.innerHTML += `<h3><b>${data.items[0].title}</b></h3><h3><a href="${data.items[0].link}" target="_blank">${data.items[0].link}</a></h3><h3><b>${data.items[0].pubDate}</b></h3>`;
+				article.innerHTML += `<img src="${data.items[0].thumbnail}"> </img>`;
+				container.appendChild(article);
+			}
+			else{
+			}
+		})
+		.catch(error => console.error('Error fetching RSS feed:', error));
+		indexer++;
+	}
+}
+
+</script>
+</head>
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSRKS7K92T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LSRKS7K92T');
+</script>
+<body onload="">
+	<div>
+		<a href="https://aalbc.com/tc/blogs/blog/63-bge-arcade/" target="_blank"> BLACK GAMES ELITE </a> <span>of</span><a href="https://aalbc.com/tc/" target="_blank">AALBC</a>
+		<h3>BGEDWS- Black Games Elite Deviantart Watching Search</h3>
+	</div>
+	<div>
+ <label for="daylength">Days from Today Most Recent Art is accepted</label>
+<select name=daylength" id="daylength">
+<option value="1">1
+</option>
+<option value="2">2
+</option>
+<option value="3">3
+</option>
+<option value="4">4
+</option>
+<option value="5">5
+</option>
+<option value="6">6
+</option>
+<option value="7">7
+</option>
+<option value="8">8
+</option>
+<option value="9">9
+</option>
+<option value="10">10
+</option>
+<option value="11">11
+</option>
+<option value="12">12
+</option>
+<option value="13">13
+</option>
+<option value="14">14
+</option>
+<option value="15">15
+</option>
+<option value="16">16
+</option>
+<option value="17">17
+</option>
+<option value="18">18
+</option>
+<option value="19">19
+</option>
+<option value="20">20
+</option>
+<option value="21">21
+</option>
+<option value="22">22
+</option>
+<option value="23">23
+</option>
+<option value="24">24
+</option>
+<option value="25">25
+</option>
+<option value="26">26
+</option>
+<option value="27">27
+</option>
+<option value="28">28
+</option>
+<option value="29">29
+</option>
+<option value="30">30
+</option>
+<option value="31">31
+</option>
+</select> 
+<button type="button" onclick="Allcheck()" >All Watching In The Days Frame</button><br>
+<label for="watching">Choose ten or less most recent for a watching:</label>
+  <select name="watching" id="watching">
+ <option value="delton36712">delton36712
+</option>
+ <option value="inkwellartz">inkwellartz
+</option>
+ <option value="raeeuchiha">raeeuchiha
+</option>
+ <option value="quintenillustrations">quintenillustrations
+</option>
+ <option value="jayusdraws">jayusdraws
+</option>
+ <option value="chocoheartz64">chocoheartz64
+</option>
+ <option value="purplelion12">purplelion12
+</option>
+ <option value="yourlocalnpc">yourlocalnpc
+</option>
+ <option value="alexanderthegrateful">alexanderthegrateful
+</option>
+ <option value="penmia">penmia
+</option>
+ <option value="kwilli0930">kwilli0930
+</option>
+ <option value="shymodd">shymodd
+</option>
+ <option value="itachi-roxas">itachi-roxas
+</option>
+ <option value="br53199">br53199
+</option>
+ <option value="bigboy2480">bigboy2480
+</option>
+ <option value="babybutta">babybutta
+</option>
+ <option value="therabbitistwisted">therabbitistwisted
+</option>
+    <option value="DASellerResources">
+DASellerResources</option><option value="color-me-club">
+color-me-club</option><option value="CRAnime-Manga">
+CRAnime-Manga</option><option value="QTcomics">
+QTcomics</option><option value="Blacklight1995">
+Blacklight1995</option>
+<option value="yomamasoigeo">
+yomamasoigeo</option>
+<option value="temari102">
+temari102</option>
+<option value="CryHOg">
+CryHOg</option>
+<option value="Innocent-Noet">
+Innocent-Noet</option>
+<option value="LukiaLacuna">
+LukiaLacuna</option>
+<option value="DreamingDragons">
+DreamingDragons</option>
+<option value="tchalla811">
+tchalla811</option>
+<option value="Gwangelinhael">
+Gwangelinhael</option>
+<option value="DailyDeviationsGroup">
+DailyDeviationsGroup</option>
+<option value="DreamUpZone">
+DreamUpZone</option>
+<option value="DraySpace18">
+DraySpace18</option>
+<option value="theurbanpinup">
+theurbanpinup</option>
+<option value="GoldenEmotions">
+GoldenEmotions</option>
+<option value="JasemineDenise">
+JasemineDenise</option>
+<option value="SaraiyuLoveless">
+SaraiyuLoveless</option>
+<option value="GriotsHouseVince">
+GriotsHouseVince</option>
+<option value="WriteOnPoemsandProse">
+WriteOnPoemsandProse</option>
+<option value="barefootliam">
+barefootliam</option>
+<option value="CLCollier">
+CLCollier</option>
+<option value="TheFulkrum">
+TheFulkrum</option>
+<option value="Charity-Guild">
+Charity-Guild</option>
+<option value="XxSaraiyu-StockxX">
+XxSaraiyu-StockxX</option>
+<option value="Inkblot-Splatter">
+Inkblot-Splatter</option>
+<option value="Weekly-AI-Challenge">
+Weekly-AI-Challenge</option>
+<option value="SouthSideChris">
+SouthSideChris</option>
+<option value="OC-training">
+OC-training</option>
+<option value="Thirstyrover">
+Thirstyrover</option>
+<option value="Tzurge">
+Tzurge</option>
+<option value="TOmega1">
+TOmega1</option>
+<option value="WritingNightmares">
+WritingNightmares</option>
+<option value="sandywood236">
+sandywood236</option>
+<option value="Badges-of-DeviantART">
+Badges-of-DeviantART</option>
+<option value="ZyDArtistiqueAries">
+ZyDArtistiqueAries</option>
+<option value="DeviantAI">
+DeviantAI</option>
+<option value="dAseniors">
+dAseniors</option>
+<option value="JadedSnowleopard">
+JadedSnowleopard</option>
+<option value="MelMuff">
+MelMuff</option>
+<option value="TergoVentus">
+TergoVentus</option>
+<option value="Community">
+Community</option>
+<option value="The-Geek-In-Pink">
+The-Geek-In-Pink</option>
+<option value="newdityartz">
+newdityartz</option>
+<option value="AuroraCollective">
+AuroraCollective</option>
+<option value="Negative-Thoughts">
+Negative-Thoughts</option>
+<option value="DyceIBG">
+DyceIBG</option>
+<option value="Prominaj">
+Prominaj</option>
+<option value="SaintsCoAnime">
+SaintsCoAnime</option>
+<option value="CRLiterature">
+CRLiterature</option>
+<option value="basiaerasmus">
+basiaerasmus</option>
+<option value="TroLeckyWillpower">
+TroLeckyWillpower</option>
+<option value="Artistle">
+Artistle</option>
+<option value="NaPoWriMo">
+NaPoWriMo</option>
+<option value="DaFollowship">
+DaFollowship</option>
+<option value="animesimpyyy">
+animesimpyyy</option>
+<option value="pinkythepink">
+pinkythepink</option>
+<option value="Neferba">
+Neferba</option>
+<option value="CartoonyPin-ups">
+CartoonyPin-ups</option>
+<option value="dA-Fragments">
+dA-Fragments</option>
+<option value="Mr-Marcus-81">
+Mr-Marcus-81</option>
+<option value="Scythoroast">
+Scythoroast</option>
+<option value="Queen-Kitty">
+Queen-Kitty</option>
+<option value="melaninmoney">
+melaninmoney</option>
+<option value="GabrielleLauren">
+GabrielleLauren</option>
+<option value="cheyennejazwise">
+cheyennejazwise</option>
+<option value="Olgola">
+Olgola</option>
+<option value="writeddreams2reality">
+writeddreams2reality</option>
+<option value="AlexanderPaupoff">
+AlexanderPaupoff</option>
+<option value="AranelTauri">
+AranelTauri</option>
+<option value="Sholosh">
+Sholosh</option>
+<option value="Sensuax">
+Sensuax</option>
+<option value="Lady-Akito">
+Lady-Akito</option>
+<option value="RODCOM1000">
+RODCOM1000</option>
+<option value="cutiechibi">
+cutiechibi</option>
+<option value="Secret-Santa-Network">
+Secret-Santa-Network</option>
+<option value="ppgrainbow">
+ppgrainbow</option>
+<option value="TerArts">
+TerArts</option>
+<option value="TymanTy914">
+TymanTy914</option>
+<option value="Barosus">
+Barosus</option>
+<option value="DarkManSpectre">
+DarkManSpectre</option>
+<option value="SimplyArtista">
+SimplyArtista</option>
+<option value="HaikuWriMo">
+HaikuWriMo</option>
+<option value="Coolbeaniebabez">
+Coolbeaniebabez</option>
+<option value="Mbembe">
+Mbembe</option>
+<option value="PrincessSparlene">
+PrincessSparlene</option>
+<option value="luxuryzz">
+luxuryzz</option>
+<option value="Atlas0">
+Atlas0</option>
+<option value="AltHarmony">
+AltHarmony</option>
+<option value="HulkYoda">
+HulkYoda</option>
+<option value="Lo536">
+Lo536</option>
+<option value="CapnDeek373">
+CapnDeek373</option>
+<option value="fabulosity">
+fabulosity</option>
+<option value="Same-side">
+Same-side</option>
+<option value="House-of-Playwrights">
+House-of-Playwrights</option>
+<option value="CamilleNat">
+CamilleNat</option>
+<option value="RTNightmare">
+RTNightmare</option>
+<option value="Symptoms0fArt">
+Symptoms0fArt</option>
+<option value="BaqpacPhoto">
+BaqpacPhoto</option>
+<option value="LilacPhoenix">
+LilacPhoenix</option>
+<option value="DemuzArt">
+DemuzArt</option>
+<option value="FrancoisL-Artblog">
+FrancoisL-Artblog</option>
+<option value="LindArtz">
+LindArtz</option>
+<option value="Malintra-Shadowmoon">
+Malintra-Shadowmoon</option>
+<option value="mcoutard">
+mcoutard</option>
+<option value="Janelle-Dimmett">
+Janelle-Dimmett</option>
+<option value="BeckyKidus">
+BeckyKidus</option>
+<option value="World-Of-Furries">
+World-Of-Furries</option>
+<option value="shad-brooks">
+shad-brooks</option>
+<option value="RoseberriiDotArt">
+RoseberriiDotArt</option>
+<option value="communityrelations">
+communityrelations</option>
+<option value="moonbeam13">
+moonbeam13</option>
+<option value="SrtaZuzza">
+SrtaZuzza</option>
+<option value="CRAdoptables">
+CRAdoptables</option>
+<option value="JustACapharnaum">
+JustACapharnaum</option>
+<option value="VampireZombie84">
+VampireZombie84</option>
+<option value="K-Zlovetch">
+K-Zlovetch</option>
+<option value="TheBootesArtVoid">
+TheBootesArtVoid</option>
+<option value="ExodusLord">
+ExodusLord</option>
+<option value="saasking">
+saasking</option>
+<option value="HarrisonHow">
+HarrisonHow</option>
+<option value="leothefox">
+leothefox</option>
+<option value="Ampraeh">
+Ampraeh</option>
+<option value="young-lyndis">
+young-lyndis</option>
+<option value="Locteck">
+Locteck</option>
+<option value="seanime">
+seanime</option>
+<option value="Princess-Tria">
+Princess-Tria</option>
+<option value="ch0copudding">
+ch0copudding</option>
+<option value="RNDmodelshop">
+RNDmodelshop</option>
+<option value="Randomthug">
+Randomthug</option>
+<option value="1000xPain">
+1000xPain</option>
+<option value="PunkOwlKing">
+PunkOwlKing</option>
+<option value="Shy-Green">
+Shy-Green</option>
+<option value="therealsirpriam">
+therealsirpriam</option>
+<option value="Chaosfive-55">
+Chaosfive-55</option>
+<option value="Maijin-kakarroto">
+Maijin-kakarroto</option>
+<option value="dt">
+dt</option>
+<option value="K-hermann">
+K-hermann</option>
+<option value="BeaGifted">
+BeaGifted</option>
+<option value="133art">
+133art</option>
+<option value="PrinceDuskstripe">
+PrinceDuskstripe</option>
+<option value="Odie1049">
+Odie1049</option>
+<option value="EclecticNinja">
+EclecticNinja</option>
+<option value="hirix">
+hirix</option>
+<option value="crysanthemum963">
+crysanthemum963</option>
+<option value="JNoface">
+JNoface</option>
+<option value="daisyein">
+daisyein</option>
+<option value="JJwinters">
+JJwinters</option>
+<option value="Ry-Spirit">
+Ry-Spirit</option>
+<option value="TheOneWithBear">
+TheOneWithBear</option>
+<option value="Dzikawa">
+Dzikawa</option>
+<option value="mcroft07">
+mcroft07</option>
+<option value="cnotbusch">
+cnotbusch</option>
+<option value="DanKendi">
+DanKendi</option>
+<option value="RatchetJak">
+RatchetJak</option><option value="SuperTiti09">
+SuperTiti09</option><option value="gkgaines">
+gkgaines</option><option value="diamndz1021">
+diamndz1021</option><option value="lilbabyteeth">
+lilbabyteeth</option><option value="pyroglyphics1">
+pyroglyphics1</option><option value="Coolitarian">
+Coolitarian</option><option value="MarkIvan">
+MarkIvan</option><option value="CaribbeanRose9">
+CaribbeanRose9</option><option value="AngelAlita77">
+AngelAlita77</option><option value="Rivenis">
+Rivenis</option><option value="ClarenceBatemanArt">
+ClarenceBatemanArt</option><option value="NinaLife31">
+NinaLife31</option><option value="Dualmask">
+Dualmask</option><option value="safyia110">
+safyia110</option><option value="Quelfabulous">
+Quelfabulous</option><option value="rgzgcreative">
+rgzgcreative</option><option value="jacobusWoolfeArt">
+jacobusWoolfeArt
+</option><option value="ChelseaGeter">ChelseaGeter
+</option><option value="gemgfx">gemgfx
+</option><option value="ColorlessPrism">ColorlessPrism
+</option><option value="SarahForde">SarahForde
+</option><option value="SOZOMAIKA">SOZOMAIKA
+</option><option value="poolstudios">poolstudios
+</option><option value="Tofusenshi">Tofusenshi
+</option><option value="Rollikins">Rollikins
+</option><option value="lamontrobinsonart">lamontrobinsonart
+</option><option value="tesseractPhobia">tesseractPhobia
+</option><option value="MollychanFTW">MollychanFTW
+</option><option value="GDBee">GDBee
+</option><option value="Kuroshi-tenshi">Kuroshi-tenshi
+</option><option value="c0smiclibra">c0smiclibra
+</option><option value="EddieHolly">EddieHolly
+</option><option value="eddaviel">eddaviel
+</option><option value="Dreadful-Tales">Dreadful-Tales
+</option><option value="danee313">danee313
+</option><option value="bleedingreignbow">bleedingreignbow
+</option><option value="Sonson-Sensei">Sonson-Sensei
+</option><option value="FkaTaylor">FkaTaylor
+</option><option value="ggMattB">ggMattB
+</option><option value="TsaoShin">TsaoShin
+</option><option value="tapwater86">tapwater86
+</option><option value="MizaelTengu">MizaelTengu
+</option><option value="NGArt7">NGArt7
+</option><option value="stumpyfongo">stumpyfongo
+</option><option value="PixiePowderPuff">PixiePowderPuff
+</option><option value="ccayco">ccayco
+</option><option value="kloir">kloir
+</option><option value="ChrissaBug">ChrissaBug
+</option><option value="KingKaijuice">KingKaijuice
+</option><option value="Cutiekitty01">Cutiekitty01
+</option><option value="David-Dennis">David-Dennis
+</option><option value="vicioushandgame">vicioushandgame
+</option><option value="Onje-Keon-Pierce">Onje-Keon-Pierce
+</option><option value="BlackRonin72">BlackRonin72
+</option><option value="SeaSlugStudios">SeaSlugStudios
+</option><option value="KMD-Artisan">KMD-Artisan
+</option><option value="Frans-Flygare">Frans-Flygare
+</option><option value="AtomicKawaii">AtomicKawaii
+</option><option value="TastyPeachStudios">TastyPeachStudios
+</option><option value="P-May-The-Great">P-May-The-Great
+</option><option value="WENTLEY-NUTZ">WENTLEY-NUTZ
+</option><option value="ToughSpirit">ToughSpirit
+</option><option value="SerpentKS">SerpentKS
+</option><option value="Mro16">Mro16
+</option><option value="Adxnna">Adxnna
+</option><option value="colourchef">colourchef
+</option><option value="FreeMech">FreeMech
+</option><option value="wakaflockaflame1">wakaflockaflame1
+</option><option value="MrSynnerster">MrSynnerster
+</option><option value="Mwishingo">Mwishingo
+</option><option value="TheArtofAytch">TheArtofAytch
+</option><option value="Breezykiid94">Breezykiid94
+</option><option value="RaySeb">RaySeb
+</option><option value="aderinola">aderinola
+</option><option value="Musashden">Musashden
+</option><option value="mystic-skillz">mystic-skillz
+</option><option value="MelanoidInk">MelanoidInk
+</option><option value="JoAsLiN">JoAsLiN
+</option><option value="artoftate">artoftate
+</option><option value="0ne0nlyLarry">0ne0nlyLarry
+</option><option value="CoreLounge">CoreLounge
+</option><option value="simoneferriero">simoneferriero
+</option><option value="sylessae">sylessae
+</option><option value="OwnOriginalCharacter">OwnOriginalCharacter
+</option><option value="OC-Tea">OC-Tea
+</option><option value="TamarinFrog">TamarinFrog
+</option><option value="theCHAMBA">theCHAMBA
+</option><option value="JessaMar">JessaMar
+</option><option value="team">team
+</option><option value="JennyStokes-Favs">JennyStokes-Favs
+</option><option value="Dobbinsart">Dobbinsart
+</option><option value="remnant-of-the-moon">remnant-of-the-moon
+</option><option value="dracodawnstar">dracodawnstar
+</option><option value="HanieMohd">HanieMohd
+</option><option value="VactuART">VactuART
+</option><option value="FlapperFoxy">FlapperFoxy
+</option><option value="KiraTheArtist">KiraTheArtist
+</option><option value="KPhillips702">KPhillips702
+</option><option value="ebony-chan">ebony-chan
+</option><option value="DjDontTouchTheTrim">DjDontTouchTheTrim
+</option><option value="chevelinpierre">chevelinpierre
+</option><option value="BlackArtSociety">BlackArtSociety
+</option><option value="BerriesAre">BerriesAre
+</option><option value="corpor8chic">corpor8chic
+</option><option value="mainasha">mainasha
+</option><option value="CurlsClub">CurlsClub
+</option><option value="Butch007">Butch007
+</option><option value="OradiaNCPorciuncula">OradiaNCPorciuncula
+</option><option value="ChocolateBeauties">ChocolateBeauties
+</option><option value="QueenieWebcomics">QueenieWebcomics
+</option><option value="Xadrea">Xadrea
+</option><option value="Remedy13">Remedy13</option>
+<option value="guillyboo">
+guillyboo</option>
+  </select>
+  <button type="button" onclick="getrecent()" >View Recent</button><br>
+	</div>
+	<div id="returndata1" style="overflow: auto; width: 100%;height: 300px;">
+	</div>
+	<div id="errormessage">
+	</div>
+</body>
+</html>
