@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MalHwie</title>
+<meta charset="UTF-8">
+<meta name="description" content="MalHwie is an image distorter program">
+<meta name="keywords" content="HTML, CSS, JavaScript, Hddeviant, Houyhnhnm">
+<meta name="author" content="Houyhnhnm/ Hddeviant , Richard Murray">
+<script>
+
+function makemalhwie(){
+	var returndimension=Number(document.getElementById("dimensions").value);
+	var tilearray=[];
+	var tilex=0;
+	var tiley=0;
+	var indexx=0;
+	var indexy=0;
+	var randomindex=0;
+	const c = document.getElementById("malhwieplace");
+	const ctx = c.getContext("2d");
+	const c2 = document.getElementById("subplace");
+	const ctx2 = c2.getContext("2d");
+	const img = document.getElementById("imageplace");
+	ctx2.drawImage(img,0,0,400,400);
+	if(returndimension<=17 && returndimension>=0){
+		tilearray = new Array(Math.pow((returndimension+3),2));
+		tilex=returndimension+3;
+		tiley=returndimension+3;
+		tilexclip=Math.floor(400/(returndimension+3));
+		tileyclip=Math.floor(400/(returndimension+3));
+		indexx=0;
+		indexy=0;
+		while(indexx<tilex){
+			indexy=0;
+			while(indexy<tiley){
+				tilearray[indexx*tilex+indexy]=-1;
+				indexy++;
+			}
+			indexx++;
+		}
+		indexx=0;
+		while(indexx<tilex){
+			indexy=0;
+			while(indexy<tiley){
+				randomindex=Math.floor(Math.random()*(tilex*tiley));
+				while(tilearray[randomindex]!=-1){
+					randomindex=Math.floor(Math.random()*(tilex*tiley));
+				}
+				tilearray[randomindex]=indexx*tilex+indexy;
+				indexy++;
+			}
+			indexx++;
+		}
+		console.log("IN FUNCTION  makemalhwie", "RandomArray"+tilearray+"Width"+tilexclip+"Height"+tileyclip);
+		indexx=0;
+		while(indexx<tilex){
+			indexy=0;
+			while(indexy<tiley){
+				ctx.drawImage(c2, (Math.floor(tilearray[indexx*tilex+indexy]/tilex))*tilexclip,(Math.floor(tilearray[indexx*tilex+indexy]%tiley))*tileyclip,  tilexclip, tileyclip, indexx*tilexclip, indexy*tileyclip, tilexclip, tileyclip);
+				indexy++;
+			}
+			indexx++;
+		}		
+	}else{
+		console.log("IN FUNCTION  makemalhwie", "No dimension set");
+	}
+}
+async function paster(){
+	try {
+
+		const canvas = document.getElementById("malhwieplace");
+		const ctx = canvas.getContext("2d");
+		ctx.fillStyle = "white";
+		await ctx.fillRect(0, 0, 400, 400);
+		const canvas2 = document.getElementById("subplace");
+		const ctx2 = canvas2.getContext("2d");
+		ctx2.fillStyle = "white";
+		await ctx2.fillRect(0, 0, 400, 400);
+		const pastedtext = await navigator.clipboard.readText();
+		document.getElementById("imageplace").src=pastedtext;
+		await console.log('Pasted text from clipboard: ', pastedtext);
+		makemalhwie();
+	} catch (err) {
+		console.error('Failure: ', err);
+	}
+}
+
+</script>
+</head>
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSRKS7K92T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LSRKS7K92T');
+</script>
+<body >
+	<div>
+		<a href="https://aalbc.com/tc/blogs/blog/63-bge-arcade/" target="_blank"> BLACK GAMES ELITE </a> <span>of</span><a href="https://aalbc.com/tc/" target="_blank">AALBC</a>
+		<h3>MalHwie</h3>
+		<h4>image visual fragmenter</h4>
+	</div>
+	<div>
+		<p><i>Support the creator with a one dollar tip </i><a href="https://www.deviantart.com/hddeviant/tier/Tip-Jar-to-HDdeviant-902770076" target="_blank">CLICK HERE TO ACCESS THE JAR</a></p>
+	</div>
+	<div>
+		<h3>INSTRUCTIONS</h3>
+		<h4>Copy an images URL from somewhere, then click the button below "Paste Content" you will have to give your permission. Then click the "Paste Content" button again and voila, a MalHwie or mixed tile variant of the image whose url you copied is next to the original, simply save or copy and paste that image for whatever use you desire</h4>
+	</div>
+	<div>
+		<label for="dimensions">Choose one of the dimension settings:</label>
+		<select name="dimensions" id="dimensions">
+			<option value="0">3x3</option>
+			<option value="1">4x4</option>
+			<option value="2">5x5</option>
+			<option value="3">6x6</option>
+			<option value="4">7x7</option>
+			<option value="5">8x8</option>
+			<option value="6">9x9</option>
+			<option value="7">10x10</option>
+			<option value="8">11x11</option>
+			<option value="9">12x12</option>
+			<option value="10">13x13</option>
+			<option value="11">14x14</option>
+			<option value="12">15x15</option>
+			<option value="13">16x16</option>
+			<option value="14">17x17</option>
+			<option value="15">18x18</option>
+			<option value="16">19x19</option>
+			<option value="17">20x20</option>
+		</select>
+		<form>
+			<button type="button" onclick="paster()">Paste Content</button>
+		</form>
+		<div>
+			<img id="imageplace" width="400px" height="400px"></img>
+			<canvas id="subplace" style="display: none;" width="400px" height="400px"></canvas>
+			<canvas id="malhwieplace" width="400px" height="400px"></canvas>
+		</div>
+	</div>
+	<div>
+		<p id="errormessage"></p>
+	</div>
+</body>
+</html>
